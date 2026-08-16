@@ -6,6 +6,8 @@ import { useSearchParams, useRouter } from "next/navigation";
 import { api } from "@/lib/api/client";
 import { Service, Category } from "@/types";
 import { CardSkeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 import {
   Search,
   SlidersHorizontal,
@@ -223,6 +225,7 @@ const FALLBACK_SERVICES: Service[] = [
 ];
 
 export default function ServicesPage() {
+  const { user } = useAuth();
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -573,7 +576,21 @@ export default function ServicesPage() {
                     </div>
 
                     <Link
-                      href={service.technician ? `/technicians/${service.technician.id}` : "/auth/login"}
+                      href={
+                        !user
+                          ? `/auth/login?redirect=${encodeURIComponent(service.technician ? `/technicians/${service.technician.id}` : "/services")}`
+                          : user.role === "TECHNICIAN"
+                          ? "#"
+                          : service.technician
+                          ? `/technicians/${service.technician.id}`
+                          : "/services"
+                      }
+                      onClick={(e) => {
+                        if (user?.role === "TECHNICIAN") {
+                          e.preventDefault();
+                          toast.error("Logged in as a Technician. Only Customer accounts can book services.");
+                        }
+                      }}
                       className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-md shadow-indigo-600/20 flex items-center gap-1"
                     >
                       Book Now <ChevronRight className="w-3.5 h-3.5" />

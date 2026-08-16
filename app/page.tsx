@@ -2,9 +2,8 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { api } from "@/lib/api/client";
-import { Service, TechnicianProfile, Category } from "@/types";
-import { CardSkeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/context/AuthContext";
+import toast from "react-hot-toast";
 import {
   Wrench,
   Zap,
@@ -138,6 +137,7 @@ const FALLBACK_TECHNICIANS: TechnicianProfile[] = [
 ];
 
 export default function HomePage() {
+  const { user } = useAuth();
   const [categories, setCategories] = useState<Category[]>([]);
   const [services, setServices] = useState<Service[]>([]);
   const [technicians, setTechnicians] = useState<TechnicianProfile[]>([]);
@@ -362,7 +362,21 @@ export default function HomePage() {
                   </div>
 
                   <Link
-                    href={service.technician ? `/technicians/${service.technician.id}` : "/auth/login"}
+                    href={
+                      !user
+                        ? `/auth/login?redirect=${encodeURIComponent(service.technician ? `/technicians/${service.technician.id}` : "/services")}`
+                        : user.role === "TECHNICIAN"
+                        ? "#"
+                        : service.technician
+                        ? `/technicians/${service.technician.id}`
+                        : "/services"
+                    }
+                    onClick={(e) => {
+                      if (user?.role === "TECHNICIAN") {
+                        e.preventDefault();
+                        toast.error("Logged in as a Technician. Only Customer accounts can book services.");
+                      }
+                    }}
                     className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-medium text-xs transition-all shadow-md shadow-indigo-600/20"
                   >
                     Book Now
