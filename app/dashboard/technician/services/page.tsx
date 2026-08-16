@@ -5,6 +5,7 @@ import Link from "next/link";
 import { api } from "@/lib/api/client";
 import { Category } from "@/types";
 import toast from "react-hot-toast";
+import { useRouter } from "next/navigation";
 import {
   Wrench,
   Plus,
@@ -16,6 +17,7 @@ import {
 } from "lucide-react";
 
 export default function CreateServicePage() {
+  const router = useRouter();
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCats, setLoadingCats] = useState(true);
 
@@ -72,10 +74,8 @@ export default function CreateServicePage() {
         durationMinutes: Number(durationMinutes),
       });
 
-      toast.success("New service package created successfully!");
-      setTitle("");
-      setDescription("");
-      setPrice("");
+      toast.success("New service package created successfully! Redirecting to dashboard...");
+      router.push("/dashboard/technician");
     } catch (err: any) {
       toast.error(err.message || "Failed to create service package");
     } finally {
