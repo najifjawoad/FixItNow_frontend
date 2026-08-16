@@ -256,6 +256,8 @@ export default function ServicesPage() {
     }
   };
 
+  const PAGE_SIZE = 6;
+
   const fetchServices = useCallback(async () => {
     setLoading(true);
     let rawList: Service[] = [];
@@ -269,8 +271,7 @@ export default function ServicesPage() {
       if (minRating) query.set("minRating", minRating);
       if (sortBy) query.set("sortBy", sortBy);
       if (sortOrder) query.set("sortOrder", sortOrder);
-      query.set("page", String(page));
-      query.set("limit", "12");
+      query.set("limit", "100");
 
       const res = await api.get(`/users/services?${query.toString()}`);
 
@@ -334,9 +335,16 @@ export default function ServicesPage() {
       );
     }
 
-    setServices(filtered);
-    setTotalServices(filtered.length);
-    setTotalPages(Math.max(Math.ceil(filtered.length / 9), 1));
+    const totalCount = filtered.length;
+    const calcTotalPages = Math.max(Math.ceil(totalCount / PAGE_SIZE), 1);
+    const currentPage = Math.min(page, calcTotalPages);
+
+    const startIndex = (currentPage - 1) * PAGE_SIZE;
+    const pagedServices = filtered.slice(startIndex, startIndex + PAGE_SIZE);
+
+    setServices(pagedServices);
+    setTotalServices(totalCount);
+    setTotalPages(calcTotalPages);
     setLoading(false);
   }, [search, categoryId, minPrice, maxPrice, minRating, sortBy, sortOrder, page, categories]);
 
