@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { api } from "@/lib/api/client";
 import toast from "react-hot-toast";
 import { Role } from "@/types";
+import { useAuth } from "@/context/AuthContext";
 import {
   Wrench,
   User,
@@ -22,6 +23,7 @@ import {
 
 export default function RegisterPage() {
   const router = useRouter();
+  const { login } = useAuth();
 
   const [role, setRole] = useState<Role>("CUSTOMER");
   const [name, setName] = useState("");
@@ -82,8 +84,14 @@ export default function RegisterPage() {
 
       await api.post("/auth/register", payload);
 
-      toast.success("Account created successfully! Please sign in.");
-      router.push("/auth/login");
+      // Auto-login immediately after successful registration
+      const loginRes = await api.post("/auth/login", { email, password });
+      if (loginRes?.accessToken) {
+        await login(loginRes.accessToken, loginRes.refreshToken);
+      }
+
+      toast.success("Welcome to FixItNow! Account created & logged in.");
+      router.push("/");
     } catch (err: any) {
       toast.error(err.message || "Registration failed. Please try again.");
     } finally {
