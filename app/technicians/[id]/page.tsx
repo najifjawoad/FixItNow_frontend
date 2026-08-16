@@ -229,8 +229,13 @@ export default function TechnicianDetailPage() {
       return;
     }
 
+    if (user.role === "TECHNICIAN") {
+      toast.error("Logged in as a Technician. Only Customer accounts can book services.");
+      return;
+    }
+
     if (user.role !== "CUSTOMER") {
-      toast.error("Only customers can create booking requests.");
+      toast.error("Only Customer accounts can book service appointments.");
       return;
     }
 
@@ -351,12 +356,21 @@ export default function TechnicianDetailPage() {
             </div>
           </div>
 
-          <button
-            onClick={() => handleOpenModal()}
-            className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 shrink-0 hover:scale-105"
-          >
-            <Calendar className="w-4 h-4" /> Book Appointment Now
-          </button>
+          {user?.role === "TECHNICIAN" ? (
+            <button
+              onClick={() => toast.error("Logged in as a Technician. Only Customer accounts can book services.")}
+              className="px-6 py-3.5 rounded-2xl bg-amber-500/10 hover:bg-amber-500/20 border border-amber-500/30 text-amber-300 font-bold text-xs transition-all flex items-center justify-center gap-2 shrink-0"
+            >
+              <ShieldCheck className="w-4 h-4 text-amber-400" /> Only Customers Can Book
+            </button>
+          ) : (
+            <button
+              onClick={() => handleOpenModal()}
+              className="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 shrink-0 hover:scale-105"
+            >
+              <Calendar className="w-4 h-4" /> Book Appointment Now
+            </button>
+          )}
         </div>
       </div>
 
