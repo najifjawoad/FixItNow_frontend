@@ -37,8 +37,23 @@ export default function CustomerDashboard() {
   const [submittingReview, setSubmittingReview] = useState(false);
   const [reviewedBookingIds, setReviewedBookingIds] = useState<string[]>([]);
 
-  // Payment Processing State
+  // Payment & Cancel Processing State
   const [payingBookingId, setPayingBookingId] = useState<string | null>(null);
+  const [cancellingId, setCancellingId] = useState<string | null>(null);
+
+  const handleCancelBooking = async (bookingId: string) => {
+    if (!confirm("Are you sure you want to cancel this booking request?")) return;
+    setCancellingId(bookingId);
+    try {
+      await api.patch(`/bookings/${bookingId}/cancel`);
+      toast.success("Booking request cancelled successfully.");
+      fetchBookings();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to cancel booking.");
+    } finally {
+      setCancellingId(null);
+    }
+  };
 
   const fetchBookings = async () => {
     try {
@@ -282,9 +297,13 @@ export default function CustomerDashboard() {
                       )}
 
                       {(booking.status === "REQUESTED" || booking.status === "ACCEPTED") && (
-                        <span className="text-[11px] text-slate-500 italic">
-                          {booking.status === "REQUESTED" ? "Awaiting acceptance" : "Ready for payment"}
-                        </span>
+                        <button
+                          onClick={() => handleCancelBooking(booking.id)}
+                          disabled={cancellingId === booking.id}
+                          className="px-3 py-1.5 rounded-xl bg-rose-950/50 hover:bg-rose-900/80 border border-rose-800/60 text-rose-300 font-semibold text-xs transition-colors inline-flex items-center gap-1 disabled:opacity-50 ml-2"
+                        >
+                          <XCircle className="w-3.5 h-3.5" /> {cancellingId === booking.id ? "Cancelling..." : "Cancel"}
+                        </button>
                       )}
                     </td>
                   </tr>
