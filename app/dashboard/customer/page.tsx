@@ -35,6 +35,7 @@ export default function CustomerDashboard() {
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [reviewedBookingIds, setReviewedBookingIds] = useState<string[]>([]);
 
   // Payment Processing State
   const [payingBookingId, setPayingBookingId] = useState<string | null>(null);
