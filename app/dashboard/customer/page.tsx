@@ -105,6 +105,7 @@ export default function CustomerDashboard() {
       });
 
       toast.success("Thank you! Review submitted successfully.");
+      setReviewedBookingIds((prev) => [...prev, reviewModalBooking.id]);
       setReviewModalBooking(null);
       setComment("");
       fetchBookings();
@@ -261,16 +262,22 @@ export default function CustomerDashboard() {
                         )}
 
                       {booking.status === "COMPLETED" && (
-                        <button
-                          onClick={() => {
-                            setReviewModalBooking(booking);
-                            setRating(5);
-                            setComment("");
-                          }}
-                          className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-semibold text-xs transition-colors inline-flex items-center gap-1"
-                        >
-                          <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> Leave Review
-                        </button>
+                        reviewedBookingIds.includes(booking.id) || (booking as any).review ? (
+                          <span className="text-[11px] font-semibold text-emerald-400 bg-emerald-500/10 px-3 py-1.5 rounded-xl border border-emerald-500/20 inline-flex items-center gap-1">
+                            <CheckCircle className="w-3.5 h-3.5" /> Review Submitted
+                          </span>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              setReviewModalBooking(booking);
+                              setRating(5);
+                              setComment("");
+                            }}
+                            className="px-3.5 py-1.5 rounded-xl bg-amber-500/20 hover:bg-amber-500/30 border border-amber-500/40 text-amber-300 font-semibold text-xs transition-colors inline-flex items-center gap-1"
+                          >
+                            <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" /> Leave Review
+                          </button>
+                        )
                       )}
 
                       {(booking.status === "REQUESTED" || booking.status === "ACCEPTED") && (
