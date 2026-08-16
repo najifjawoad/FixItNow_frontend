@@ -13,13 +13,11 @@ import {
   Calendar,
   CheckCircle2,
   Clock,
-  DollarSign,
   Play,
-  XCircle,
   Plus,
-  Loader2,
   TrendingUp,
-  UserCheck,
+  Star,
+  MessageSquare,
 } from "lucide-react";
 
 export default function TechnicianDashboard() {
@@ -73,6 +71,21 @@ export default function TechnicianDashboard() {
     .filter((b) => b.status === "PAID" || b.status === "IN_PROGRESS" || b.status === "COMPLETED")
     .reduce((sum, b) => sum + Number(b.service?.price || 0), 0);
 
+  // Extract Reviews Received across all jobs
+  const reviewsList = bookings.flatMap((b) => {
+    const rawReviews = (b as any).reviews || ((b as any).review ? [(b as any).review] : []);
+    return rawReviews.map((r: any) => ({
+      ...r,
+      serviceTitle: b.service?.title || "Service Job",
+      customerName: r.customer?.name || b.customer?.name || "Verified Customer",
+    }));
+  });
+
+  const avgReceivedRating =
+    reviewsList.length > 0
+      ? (reviewsList.reduce((sum, r) => sum + Number(r.rating || 5), 0) / reviewsList.length).toFixed(1)
+      : "5.0";
+
   return (
     <div className="space-y-8 pb-12">
       {/* Header Banner */}
@@ -82,7 +95,7 @@ export default function TechnicianDashboard() {
             Provider Dashboard
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Technician Portal: {user?.name}</h1>
-          <p className="text-xs text-slate-400 mt-1">Manage incoming booking requests, update job statuses, and post your availability.</p>
+          <p className="text-xs text-slate-400 mt-1">Manage incoming booking requests, update job statuses, and track your customer reviews.</p>
         </div>
 
         <div className="flex items-center gap-3">
@@ -102,13 +115,13 @@ export default function TechnicianDashboard() {
       </div>
 
       {/* Metrics Grid */}
-      <div className="grid grid-cols-1 sm:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
         <div className="glass-card p-5 rounded-2xl border border-slate-800 flex items-center gap-4">
           <div className="p-3.5 rounded-xl bg-amber-500/20 text-amber-400">
             <Clock className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider block">Pending Requests</span>
+            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Pending</span>
             <span className="text-2xl font-extrabold text-white">{pendingRequests.length}</span>
           </div>
         </div>
@@ -118,7 +131,7 @@ export default function TechnicianDashboard() {
             <Calendar className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider block">Active / Paid Jobs</span>
+            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Active / Paid</span>
             <span className="text-2xl font-extrabold text-white">{upcomingJobs.length}</span>
           </div>
         </div>
@@ -128,7 +141,7 @@ export default function TechnicianDashboard() {
             <CheckCircle2 className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider block">Completed</span>
+            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Completed</span>
             <span className="text-2xl font-extrabold text-white">{completedJobs.length}</span>
           </div>
         </div>
@@ -138,8 +151,18 @@ export default function TechnicianDashboard() {
             <TrendingUp className="w-6 h-6" />
           </div>
           <div>
-            <span className="text-xs font-medium text-slate-400 uppercase tracking-wider block">Total Earnings</span>
+            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Total Earnings</span>
             <span className="text-2xl font-extrabold text-white">${totalEarnings.toFixed(2)}</span>
+          </div>
+        </div>
+
+        <div className="glass-card p-5 rounded-2xl border border-slate-800 flex items-center gap-4">
+          <div className="p-3.5 rounded-xl bg-yellow-500/20 text-yellow-400">
+            <Star className="w-6 h-6 fill-yellow-400" />
+          </div>
+          <div>
+            <span className="text-[11px] font-medium text-slate-400 uppercase tracking-wider block">Avg Rating</span>
+            <span className="text-2xl font-extrabold text-white">{avgReceivedRating}★</span>
           </div>
         </div>
       </div>
@@ -269,6 +292,78 @@ export default function TechnicianDashboard() {
                 <tr>
                   <td colSpan={6} className="p-8 text-center text-slate-400">
                     No booking requests assigned yet. Make sure your availability slots are set!
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      {/* NEW: Customer Reviews & Ratings Received Segment */}
+      <section className="glass-card rounded-2xl border border-slate-800 overflow-hidden space-y-4 p-6">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div>
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Star className="w-5 h-5 text-amber-400 fill-amber-400" /> Customer Reviews & Ratings Received
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">Specifications of customer feedback for your completed service jobs</p>
+          </div>
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-amber-500/10 text-amber-300 border border-amber-500/20">
+            Avg {avgReceivedRating} ★ ({reviewsList.length} reviews)
+          </span>
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full text-left text-xs text-slate-300">
+            <thead className="bg-slate-900/80 text-slate-400 uppercase tracking-wider font-semibold border-b border-slate-800">
+              <tr>
+                <th className="p-3.5">Customer Name</th>
+                <th className="p-3.5">Service Job</th>
+                <th className="p-3.5">Rating Given</th>
+                <th className="p-3.5">Customer Comment</th>
+                <th className="p-3.5 text-right">Date</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-800/60">
+              {reviewsList.length > 0 ? (
+                reviewsList.map((rev: any, index: number) => (
+                  <tr key={rev.id || index} className="hover:bg-slate-800/30 transition-colors">
+                    <td className="p-3.5 font-bold text-white flex items-center gap-2">
+                      <div className="w-7 h-7 rounded-full bg-indigo-600/30 text-indigo-300 text-xs flex items-center justify-center font-bold">
+                        {rev.customerName.charAt(0)}
+                      </div>
+                      {rev.customerName}
+                    </td>
+                    <td className="p-3.5 font-medium text-slate-200">
+                      {rev.serviceTitle}
+                    </td>
+                    <td className="p-3.5">
+                      <div className="flex items-center text-amber-400 font-bold text-xs">
+                        <Star className="w-3.5 h-3.5 fill-amber-400 mr-1" />
+                        {rev.rating || 5} / 5
+                      </div>
+                    </td>
+                    <td className="p-3.5 text-slate-300 max-w-sm">
+                      {rev.comment ? (
+                        <p className="italic text-slate-300">&quot;{rev.comment}&quot;</p>
+                      ) : (
+                        <span className="text-slate-500 italic">No text comment left</span>
+                      )}
+                    </td>
+                    <td className="p-3.5 text-right text-slate-400">
+                      {rev.createdAt ? new Date(rev.createdAt).toLocaleDateString() : "Recent"}
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan={5} className="p-8 text-center text-slate-400">
+                    <MessageSquare className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+                    <p className="font-semibold text-slate-300">No Customer Reviews Received Yet</p>
+                    <p className="text-xs text-slate-500 mt-1">
+                      When customers submit feedback for your completed jobs, their ratings and reviews will appear here!
+                    </p>
                   </td>
                 </tr>
               )}
