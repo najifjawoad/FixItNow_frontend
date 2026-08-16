@@ -60,9 +60,9 @@ export default function LoginPage() {
     }
   };
 
-  const fillQuickDemo = (demoEmail: string) => {
+  const fillQuickDemo = (demoEmail: string, demoPass = "password123") => {
     setEmail(demoEmail);
-    setPassword("password123");
+    setPassword(demoPass);
     toast.success(`Filled credentials for ${demoEmail}`);
   };
 
@@ -160,7 +160,7 @@ export default function LoginPage() {
             <div className="grid grid-cols-3 gap-2">
               <button
                 type="button"
-                onClick={() => fillQuickDemo("admin@fixitnow.com")}
+                onClick={() => fillQuickDemo("admin123@gmail.com", "12345")}
                 className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-900 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/30 text-rose-400 transition-all group"
               >
                 <ShieldCheck className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform" />

@@ -21,7 +21,7 @@ Project Title: **FixItNow - Your Trusted Home Service Platform**
   > "Let's demonstrate how our UI dynamically adapts according to the authenticated user's role:
   > 1. **Customer Role (`customer@fixitnow.com`)**: Upon login, the top navigation displays a blue **Customer** badge. The customer dashboard `/dashboard/customer` presents active job tracking, booking history, and Stripe checkout buttons.
   > 2. **Technician/Provider Role (`tech@fixitnow.com`)**: Logging in as a Technician displays an amber **Provider** badge. The dashboard `/dashboard/technician` provides job request management, an interactive availability calendar `/dashboard/technician/availability`, and service package creation.
-  > 3. **Admin Role (`admin@fixitnow.com`)**: The navbar shows a rose **Admin** badge. The admin dashboard `/dashboard/admin` gives platform-wide metrics, user ban/unban moderation toggles, and service category management."
+  > 3. **Admin Role (`admin123@gmail.com`)**: The navbar shows a rose **Admin** badge. The admin dashboard `/dashboard/admin` gives platform-wide metrics, user ban/unban moderation toggles, and service category management."
 
 ### 3. Full CRUD Operations Walkthrough (2 Minutes)
 - **Script & Action**:

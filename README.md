@@ -8,7 +8,7 @@ FixItNow is a modern, responsive Next.js (App Router) frontend application for a
 
 | Role | Email | Password | Access / Permissions |
 | :--- | :--- | :--- | :--- |
-| **Admin** | `admin@fixitnow.com` | `password123` | Platform overview metrics, User management (Ban/Unban), Service Categories |
+| **Admin** | `admin123@gmail.com` | `12345` | Platform overview metrics, User management (Ban/Unban), Service Categories |
 | **Technician / Provider** | `tech@fixitnow.com` | `password123` | Provider dashboard, Accept/Decline requests, Availability calendar, Add services |
 | **Customer / Tenant** | `customer@fixitnow.com` | `password123` | Browse services, Time-slot booking modal, Stripe payment checkout, Rate & Review |
 
