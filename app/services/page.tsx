@@ -16,17 +16,25 @@ import {
   ChevronRight,
 } from "lucide-react";
 
+const FALLBACK_CATEGORIES: Category[] = [
+  { id: "cat-electrical", name: "Electrical Services", description: "Wiring, circuit breaker repair, lighting installation", createdAt: new Date().toISOString() },
+  { id: "cat-plumbing", name: "Plumbing & Piping", description: "Leak repair, drain unblocking, faucet installation", createdAt: new Date().toISOString() },
+  { id: "cat-hvac", name: "HVAC & AC Service", description: "Air conditioner repair, duct cleaning, heating maintenance", createdAt: new Date().toISOString() },
+  { id: "cat-carpentry", name: "Carpentry & Repairs", description: "Furniture assembly, door lock repair, shelving fixes", createdAt: new Date().toISOString() },
+];
+
 const FALLBACK_SERVICES: Service[] = [
+  // Electrical Services
   {
-    id: "srv-1",
+    id: "srv-elec-1",
     technicianId: "tech-1",
-    categoryId: "cat-1",
+    categoryId: "cat-electrical",
     title: "Electrical Circuit Breaker & Panel Upgrade",
     description: "Full diagnostic of electrical panel, breaker replacement, and safety grounding certification.",
     price: 120.0,
     durationMinutes: 90,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-1", name: "Electrical Services", createdAt: new Date().toISOString() },
+    category: { id: "cat-electrical", name: "Electrical Services", createdAt: new Date().toISOString() },
     technician: {
       id: "tech-1",
       userId: "u-tech-1",
@@ -39,15 +47,15 @@ const FALLBACK_SERVICES: Service[] = [
     },
   },
   {
-    id: "srv-2",
+    id: "srv-elec-2",
     technicianId: "tech-1",
-    categoryId: "cat-1",
+    categoryId: "cat-electrical",
     title: "Emergency Wiring & Outlet Repair",
     description: "Troubleshooting short circuits, repairing sparky wall outlets, and fixture re-wiring.",
     price: 85.0,
     durationMinutes: 60,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-1", name: "Electrical Services", createdAt: new Date().toISOString() },
+    category: { id: "cat-electrical", name: "Electrical Services", createdAt: new Date().toISOString() },
     technician: {
       id: "tech-1",
       userId: "u-tech-1",
@@ -60,36 +68,38 @@ const FALLBACK_SERVICES: Service[] = [
     },
   },
   {
-    id: "srv-3",
+    id: "srv-elec-3",
     technicianId: "tech-1",
-    categoryId: "cat-3",
-    title: "AC Unit Deep Cleaning & Coolant Inspection",
-    description: "Filter replacement, coil washing, refrigerant level check, and thermostat calibration.",
-    price: 95.0,
-    durationMinutes: 75,
+    categoryId: "cat-electrical",
+    title: "Smart Light Fixture & Ceiling Fan Setup",
+    description: "Installation of dimmers, chandeliers, smart home switches, and outdoor security lighting.",
+    price: 65.0,
+    durationMinutes: 45,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-3", name: "HVAC & AC Service", createdAt: new Date().toISOString() },
+    category: { id: "cat-electrical", name: "Electrical Services", createdAt: new Date().toISOString() },
     technician: {
       id: "tech-1",
       userId: "u-tech-1",
       avgRating: 4.9,
       experienceYears: 8,
       verified: true,
-      skills: ["HVAC", "Cooling"],
+      skills: ["Electrical", "Wiring"],
       createdAt: new Date().toISOString(),
       user: { id: "u-tech-1", name: "Alexander Wright", email: "tech@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
     },
   },
+
+  // Plumbing Services
   {
-    id: "srv-4",
+    id: "srv-plumb-1",
     technicianId: "tech-2",
-    categoryId: "cat-2",
+    categoryId: "cat-plumbing",
     title: "Emergency Pipe Leak Repair & Sealing",
     description: "Immediate response for bursting pipes, high-pressure sealing, and joint replacement.",
     price: 110.0,
     durationMinutes: 60,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-2", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
+    category: { id: "cat-plumbing", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
     technician: {
       id: "tech-2",
       userId: "u-tech-2",
@@ -102,15 +112,15 @@ const FALLBACK_SERVICES: Service[] = [
     },
   },
   {
-    id: "srv-5",
+    id: "srv-plumb-2",
     technicianId: "tech-2",
-    categoryId: "cat-2",
+    categoryId: "cat-plumbing",
     title: "Kitchen Faucet & Drain Unblocking",
     description: "Clogged sink restoration, faucet replacement, garbage disposal maintenance.",
     price: 75.0,
     durationMinutes: 45,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-2", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
+    category: { id: "cat-plumbing", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
     technician: {
       id: "tech-2",
       userId: "u-tech-2",
@@ -122,6 +132,94 @@ const FALLBACK_SERVICES: Service[] = [
       user: { id: "u-tech-2", name: "Sarah Jenkins", email: "tech2@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
     },
   },
+  {
+    id: "srv-plumb-3",
+    technicianId: "tech-2",
+    categoryId: "cat-plumbing",
+    title: "Water Heater Flushing & Thermostat Repair",
+    description: "Sediment flush for hot water tank, temperature calibration, and heating element testing.",
+    price: 130.0,
+    durationMinutes: 90,
+    createdAt: new Date().toISOString(),
+    category: { id: "cat-plumbing", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
+    technician: {
+      id: "tech-2",
+      userId: "u-tech-2",
+      avgRating: 4.8,
+      experienceYears: 6,
+      verified: true,
+      skills: ["Plumbing"],
+      createdAt: new Date().toISOString(),
+      user: { id: "u-tech-2", name: "Sarah Jenkins", email: "tech2@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    },
+  },
+
+  // HVAC Services
+  {
+    id: "srv-hvac-1",
+    technicianId: "tech-1",
+    categoryId: "cat-hvac",
+    title: "AC Unit Deep Cleaning & Coolant Inspection",
+    description: "Filter replacement, coil washing, refrigerant level check, and thermostat calibration.",
+    price: 95.0,
+    durationMinutes: 75,
+    createdAt: new Date().toISOString(),
+    category: { id: "cat-hvac", name: "HVAC & AC Service", createdAt: new Date().toISOString() },
+    technician: {
+      id: "tech-1",
+      userId: "u-tech-1",
+      avgRating: 4.9,
+      experienceYears: 8,
+      verified: true,
+      skills: ["HVAC", "Cooling"],
+      createdAt: new Date().toISOString(),
+      user: { id: "u-tech-1", name: "Alexander Wright", email: "tech@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    },
+  },
+  {
+    id: "srv-hvac-2",
+    technicianId: "tech-1",
+    categoryId: "cat-hvac",
+    title: "Central Heating System Maintenance & Duct Sanitization",
+    description: "Full furnace tune-up, air duct dust vacuuming, and blower motor lubrication.",
+    price: 140.0,
+    durationMinutes: 90,
+    createdAt: new Date().toISOString(),
+    category: { id: "cat-hvac", name: "HVAC & AC Service", createdAt: new Date().toISOString() },
+    technician: {
+      id: "tech-1",
+      userId: "u-tech-1",
+      avgRating: 4.9,
+      experienceYears: 8,
+      verified: true,
+      skills: ["HVAC"],
+      createdAt: new Date().toISOString(),
+      user: { id: "u-tech-1", name: "Alexander Wright", email: "tech@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    },
+  },
+
+  // Carpentry Services
+  {
+    id: "srv-carp-1",
+    technicianId: "tech-2",
+    categoryId: "cat-carpentry",
+    title: "Custom Furniture Assembly & Cabinet Repair",
+    description: "IKEA and custom furniture assembly, cabinet door hinge adjustment, and drawer slide alignment.",
+    price: 70.0,
+    durationMinutes: 60,
+    createdAt: new Date().toISOString(),
+    category: { id: "cat-carpentry", name: "Carpentry & Repairs", createdAt: new Date().toISOString() },
+    technician: {
+      id: "tech-2",
+      userId: "u-tech-2",
+      avgRating: 4.8,
+      experienceYears: 6,
+      verified: true,
+      skills: ["Carpentry"],
+      createdAt: new Date().toISOString(),
+      user: { id: "u-tech-2", name: "Sarah Jenkins", email: "tech2@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    },
+  },
 ];
 
 export default function ServicesPage() {
@@ -129,7 +227,7 @@ export default function ServicesPage() {
   const searchParams = useSearchParams();
 
   const [services, setServices] = useState<Service[]>(FALLBACK_SERVICES);
-  const [categories, setCategories] = useState<Category[]>([]);
+  const [categories, setCategories] = useState<Category[]>(FALLBACK_CATEGORIES);
   const [loading, setLoading] = useState(true);
 
   // Filter States
@@ -144,20 +242,24 @@ export default function ServicesPage() {
   // Meta
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const [totalServices, setTotalServices] = useState(5);
+  const [totalServices, setTotalServices] = useState(FALLBACK_SERVICES.length);
 
   const fetchCategories = async () => {
     try {
       const res = await api.get("/admin/allCategories");
       const data = Array.isArray(res) ? res : res?.data || [];
-      setCategories(data);
+      if (data.length > 0) {
+        setCategories(data);
+      }
     } catch (e) {
-      console.error("Failed to load categories:", e);
+      console.error("Failed to load categories from API:", e);
     }
   };
 
   const fetchServices = useCallback(async () => {
     setLoading(true);
+    let rawList: Service[] = [];
+
     try {
       const query = new URLSearchParams();
       if (search) query.set("search", search);
@@ -168,40 +270,75 @@ export default function ServicesPage() {
       if (sortBy) query.set("sortBy", sortBy);
       if (sortOrder) query.set("sortOrder", sortOrder);
       query.set("page", String(page));
-      query.set("limit", "9");
+      query.set("limit", "12");
 
       const res = await api.get(`/users/services?${query.toString()}`);
 
       if (res) {
         if (Array.isArray(res)) {
-          setServices(res.length > 0 ? res : FALLBACK_SERVICES);
-          setTotalServices(res.length > 0 ? res.length : FALLBACK_SERVICES.length);
-          setTotalPages(1);
-        } else {
-          const list = res.data || [];
-          setServices(list.length > 0 ? list : FALLBACK_SERVICES);
-          if (res.meta) {
-            setTotalPages(res.meta.totalPages || 1);
-            setTotalServices(res.meta.total || list.length);
-          }
+          rawList = res;
+        } else if (res.data && Array.isArray(res.data)) {
+          rawList = res.data;
         }
       }
     } catch (err) {
       console.error("Error fetching services from API:", err);
-      // Filter fallback services locally if search or categoryId is specified
-      let filtered = [...FALLBACK_SERVICES];
-      if (search) {
-        filtered = filtered.filter((s) => s.title.toLowerCase().includes(search.toLowerCase()));
-      }
-      if (categoryId) {
-        filtered = filtered.filter((s) => s.categoryId === categoryId);
-      }
-      setServices(filtered);
-      setTotalServices(filtered.length);
-    } finally {
-      setLoading(false);
     }
-  }, [search, categoryId, minPrice, maxPrice, minRating, sortBy, sortOrder, page]);
+
+    // Combine or fallback if rawList is empty
+    const sourceList = rawList.length > 0 ? rawList : FALLBACK_SERVICES;
+
+    // Apply strict Category & Search filtering on sourceList
+    let filtered = [...sourceList];
+
+    if (search) {
+      filtered = filtered.filter((s) =>
+        s.title.toLowerCase().includes(search.toLowerCase()) ||
+        (s.description && s.description.toLowerCase().includes(search.toLowerCase()))
+      );
+    }
+
+    if (categoryId) {
+      const selectedCat = categories.find((c) => c.id === categoryId);
+      const targetCatName = selectedCat ? selectedCat.name.toLowerCase() : categoryId.toLowerCase();
+
+      filtered = filtered.filter((s) => {
+        // Direct ID match
+        if (s.categoryId === categoryId) return true;
+        
+        // Name-based match fallback
+        const srvCatName = s.category?.name?.toLowerCase() || "";
+        if (targetCatName.includes("electric") && srvCatName.includes("electric")) return true;
+        if (targetCatName.includes("plumb") && srvCatName.includes("plumb")) return true;
+        if (targetCatName.includes("hvac") && (srvCatName.includes("hvac") || srvCatName.includes("ac"))) return true;
+        if (targetCatName.includes("carpenter") || targetCatName.includes("carpen") && (srvCatName.includes("carpen") || srvCatName.includes("repair"))) return true;
+        
+        return srvCatName === targetCatName;
+      });
+    }
+
+    if (minPrice) {
+      filtered = filtered.filter((s) => Number(s.price) >= Number(minPrice));
+    }
+    if (maxPrice) {
+      filtered = filtered.filter((s) => Number(s.price) <= Number(maxPrice));
+    }
+    if (minRating && Number(minRating) > 0) {
+      filtered = filtered.filter((s) => (s.technician?.avgRating || 5) >= Number(minRating));
+    }
+
+    // Sort
+    if (sortBy === "price") {
+      filtered.sort((a, b) =>
+        sortOrder === "asc" ? Number(a.price) - Number(b.price) : Number(b.price) - Number(a.price)
+      );
+    }
+
+    setServices(filtered);
+    setTotalServices(filtered.length);
+    setTotalPages(Math.max(Math.ceil(filtered.length / 9), 1));
+    setLoading(false);
+  }, [search, categoryId, minPrice, maxPrice, minRating, sortBy, sortOrder, page, categories]);
 
   useEffect(() => {
     fetchCategories();
@@ -372,7 +509,7 @@ export default function ServicesPage() {
           <div className="flex items-center justify-between text-xs text-slate-400">
             <span>
               Showing <strong className="text-white">{services.length}</strong> of{" "}
-              <strong className="text-white">{totalServices || services.length}</strong> available services
+              <strong className="text-white">{totalServices}</strong> available services
             </span>
           </div>
 
@@ -442,9 +579,9 @@ export default function ServicesPage() {
               <div className="p-3 rounded-2xl bg-indigo-500/10 text-indigo-400 w-fit mx-auto">
                 <Wrench className="w-8 h-8" />
               </div>
-              <h3 className="text-lg font-bold text-white">No services found</h3>
+              <h3 className="text-lg font-bold text-white">No services found for this filter</h3>
               <p className="text-xs text-slate-400 max-w-sm mx-auto">
-                Try adjusting your search criteria or resetting filters to view all available service offerings.
+                Try selecting a different category or resetting your search filter.
               </p>
               <button
                 onClick={handleResetFilters}
