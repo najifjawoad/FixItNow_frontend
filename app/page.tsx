@@ -219,10 +219,10 @@ export default function HomePage() {
                 e.preventDefault();
                 if (searchQuery) window.location.href = `/services?search=${encodeURIComponent(searchQuery)}`;
               }}
-              className="flex flex-col sm:flex-row items-center gap-3 p-2 bg-slate-900/90 rounded-2xl border border-slate-700/80 shadow-2xl"
+              className="flex flex-col sm:flex-row items-center gap-3 p-2.5 bg-slate-900/90 rounded-2xl border border-slate-700/80 shadow-2xl backdrop-blur-xl"
             >
               <div className="relative flex-1 w-full">
-                <Search className="w-5 h-5 text-slate-400 absolute left-4 top-1/2 -translate-y-1/2" />
+                <Search className="w-5 h-5 text-indigo-400 absolute left-4 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
@@ -233,7 +233,7 @@ export default function HomePage() {
               </div>
               <button
                 type="submit"
-                className="w-full sm:w-auto px-6 py-3 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-semibold text-sm transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
+                className="w-full sm:w-auto px-7 py-3 rounded-xl glow-btn-primary text-white font-bold text-sm flex items-center justify-center gap-2"
               >
                 Search Services <ArrowRight className="w-4 h-4" />
               </button>
@@ -241,18 +241,18 @@ export default function HomePage() {
           </div>
 
           {/* Stat Pills */}
-          <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-300">
-            <div className="flex items-center gap-2">
+          <div className="pt-4 flex flex-wrap items-center gap-4 text-xs text-slate-300 font-medium">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-emerald-500/30 text-emerald-300 shadow-sm">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
               <span>100% Background Verified</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-indigo-500/30 text-indigo-300 shadow-sm">
               <CreditCard className="w-4 h-4 text-indigo-400" />
               <span>Stripe Payment Protection</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-slate-900/60 border border-amber-500/30 text-amber-300 shadow-sm">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span>4.9/5 Average Customer Rating</span>
+              <span>4.9 / 5.0 Rating</span>
             </div>
           </div>
         </div>
