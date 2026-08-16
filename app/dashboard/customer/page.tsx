@@ -207,46 +207,58 @@ export default function CustomerDashboard() {
                   <TableRowSkeleton />
                 </>
               ) : bookings.length > 0 ? (
-                bookings.map((booking) => (
-                  <tr key={booking.id} className="hover:bg-slate-800/30 transition-colors">
-                    <td className="p-3.5 font-semibold text-white">
-                      <div>{booking.service?.title || "Home Service"}</div>
-                      <div className="text-[11px] text-slate-400 font-normal truncate max-w-xs">{booking.address}</div>
-                    </td>
-                    <td className="p-3.5 font-medium text-slate-200">
-                      {booking.technician?.user?.name || "Technician"}
-                    </td>
-                    <td className="p-3.5 text-slate-400">
-                      {new Date(booking.scheduledAt).toLocaleDateString(undefined, {
-                        month: "short",
-                        day: "numeric",
-                        year: "numeric",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </td>
-                    <td className="p-3.5">
-                      <StatusBadge status={booking.status} />
-                    </td>
-                    <td className="p-3.5 text-right space-x-2">
-                      {/* Action buttons based on status */}
-                      {booking.status === "ACCEPTED" && (
-                        <button
-                          onClick={() => handleInitiatePayment(booking.id)}
-                          disabled={payingBookingId === booking.id}
-                          className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 transition-all inline-flex items-center gap-1.5 disabled:opacity-50"
-                        >
-                          {payingBookingId === booking.id ? (
-                            <>
-                              <Loader2 className="w-3.5 h-3.5 animate-spin" /> Processing...
-                            </>
-                          ) : (
-                            <>
-                              <CreditCard className="w-3.5 h-3.5" /> Pay Now (${Number(booking.service?.price || 0).toFixed(2)})
-                            </>
-                          )}
-                        </button>
-                      )}
+                bookings.map((booking) => {
+                  const hasPaidRecord = payments.some(
+                    (p) => (p.bookingId === booking.id || (p.booking && p.booking.id === booking.id)) && p.status !== "FAILED"
+                  );
+                  const effectiveStatus = (hasPaidRecord && booking.status === "ACCEPTED") ? "PAID" : booking.status;
+
+                  return (
+                    <tr key={booking.id} className="hover:bg-slate-800/30 transition-colors">
+                      <td className="p-3.5 font-semibold text-white">
+                        <div>{booking.service?.title || "Home Service"}</div>
+                        <div className="text-[11px] text-slate-400 font-normal truncate max-w-xs">{booking.address}</div>
+                      </td>
+                      <td className="p-3.5 font-medium text-slate-200">
+                        {booking.technician?.user?.name || "Technician"}
+                      </td>
+                      <td className="p-3.5 text-slate-400">
+                        {new Date(booking.scheduledAt).toLocaleDateString(undefined, {
+                          month: "short",
+                          day: "numeric",
+                          year: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </td>
+                      <td className="p-3.5">
+                        <StatusBadge status={effectiveStatus} />
+                      </td>
+                      <td className="p-3.5 text-right space-x-2">
+                        {/* Action buttons based on status */}
+                        {effectiveStatus === "ACCEPTED" && (
+                          <button
+                            onClick={() => handleInitiatePayment(booking.id)}
+                            disabled={payingBookingId === booking.id}
+                            className="px-3.5 py-1.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 text-white font-bold text-xs shadow-md shadow-blue-600/30 transition-all inline-flex items-center gap-1.5 disabled:opacity-50"
+                          >
+                            {payingBookingId === booking.id ? (
+                              <>
+                                <Loader2 className="w-3.5 h-3.5 animate-spin" /> Processing...
+                              </>
+                            ) : (
+                              <>
+                                <CreditCard className="w-3.5 h-3.5" /> Pay Now (${Number(booking.service?.price || 0).toFixed(2)})
+                              </>
+                            )}
+                          </button>
+                        )}
+
+                        {effectiveStatus === "PAID" && (
+                          <span className="text-[11px] font-semibold text-purple-400 bg-purple-500/10 px-3 py-1.5 rounded-xl border border-purple-500/20">
+                            Payment Completed
+                          </span>
+                        )}
 
                       {booking.status === "COMPLETED" && (
                         <button
@@ -268,8 +280,9 @@ export default function CustomerDashboard() {
                       )}
                     </td>
                   </tr>
-                ))
-              ) : (
+                );
+              })
+            ) : (
                 <tr>
                   <td colSpan={5} className="p-8 text-center text-slate-400">
                     No booking requests found. Browse our services catalog to create your first appointment!
