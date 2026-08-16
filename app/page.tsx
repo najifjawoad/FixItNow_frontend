@@ -2,6 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { api } from "@/lib/api/client";
+import { Service, TechnicianProfile, Category } from "@/types";
+import { CardSkeleton } from "@/components/ui/skeleton";
 import { useAuth } from "@/context/AuthContext";
 import toast from "react-hot-toast";
 import {
