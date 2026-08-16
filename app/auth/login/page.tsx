@@ -96,7 +96,7 @@ export default function LoginPage() {
                     setEmail(e.target.value);
                     setFieldErrors((prev) => ({ ...prev, email: "" }));
                   }}
-                  placeholder="admin@fixitnow.com"
+                  placeholder="e.g. user@example.com"
                   className={`w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pl-11 pr-4 py-3 text-sm border focus:outline-none focus:ring-2 transition-all ${
                     fieldErrors.email
                       ? "border-rose-500/80 focus:ring-rose-500/50"
@@ -122,7 +122,7 @@ export default function LoginPage() {
                     setPassword(e.target.value);
                     setFieldErrors((prev) => ({ ...prev, password: "" }));
                   }}
-                  placeholder="••••••••"
+                  placeholder="Enter your account password"
                   className={`w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pl-11 pr-4 py-3 text-sm border focus:outline-none focus:ring-2 transition-all ${
                     fieldErrors.password
                       ? "border-rose-500/80 focus:ring-rose-500/50"
@@ -157,30 +157,22 @@ export default function LoginPage() {
             <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-3 text-center">
               Quick Demo Logins (Click to Autofill)
             </p>
-            <div className="grid grid-cols-3 gap-2">
-              <button
-                type="button"
-                onClick={() => fillQuickDemo("admin123@gmail.com", "12345")}
-                className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-900 hover:bg-rose-500/10 border border-slate-800 hover:border-rose-500/30 text-rose-400 transition-all group"
-              >
-                <ShieldCheck className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-semibold">Admin</span>
-              </button>
+            <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
                 onClick={() => fillQuickDemo("tech@fixitnow.com")}
-                className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/30 text-amber-400 transition-all group"
+                className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/30 text-amber-400 transition-all group"
               >
-                <Briefcase className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-semibold">Technician</span>
+                <Briefcase className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />
+                <span className="text-xs font-bold">Technician Demo</span>
               </button>
               <button
                 type="button"
                 onClick={() => fillQuickDemo("customer@fixitnow.com")}
-                className="flex flex-col items-center justify-center p-2.5 rounded-xl bg-slate-900 hover:bg-indigo-500/10 border border-slate-800 hover:border-indigo-500/30 text-indigo-400 transition-all group"
+                className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900 hover:bg-indigo-500/10 border border-slate-800 hover:border-indigo-500/30 text-indigo-400 transition-all group"
               >
-                <UserCheck className="w-4 h-4 mb-1 group-hover:scale-110 transition-transform" />
-                <span className="text-[11px] font-semibold">Customer</span>
+                <UserCheck className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />
+                <span className="text-xs font-bold">Customer Demo</span>
               </button>
             </div>
           </div>

@@ -159,7 +159,7 @@ export default function RegisterPage() {
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="John Doe"
+                    placeholder="e.g. Tariqul Islam"
                     className={`w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pl-9 pr-3 py-2.5 text-sm border focus:outline-none focus:ring-2 ${
                       errors.name ? "border-rose-500/80" : "border-slate-800 focus:border-indigo-500"
                     }`}
@@ -178,7 +178,7 @@ export default function RegisterPage() {
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="john@example.com"
+                    placeholder="e.g. user@example.com"
                     className={`w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pl-9 pr-3 py-2.5 text-sm border focus:outline-none focus:ring-2 ${
                       errors.email ? "border-rose-500/80" : "border-slate-800 focus:border-indigo-500"
                     }`}
@@ -199,7 +199,7 @@ export default function RegisterPage() {
                     type="password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    placeholder="••••••••"
+                    placeholder="Create a password"
                     className={`w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pl-9 pr-3 py-2.5 text-sm border focus:outline-none focus:ring-2 ${
                       errors.password ? "border-rose-500/80" : "border-slate-800 focus:border-indigo-500"
                     }`}
@@ -218,7 +218,7 @@ export default function RegisterPage() {
                     type="text"
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
-                    placeholder="+1 555-0199"
+                    placeholder="e.g. +880 1712-345678"
                     className="w-full bg-slate-900/90 text-white placeholder-slate-500 rounded-xl pl-9 pr-3 py-2.5 text-sm border border-slate-800 focus:border-indigo-500 focus:outline-none"
                   />
                 </div>
