@@ -18,116 +18,152 @@ import {
   X,
   MessageSquare,
   AlertCircle,
+  Phone,
 } from "lucide-react";
 
 const FALLBACK_TECHNICIANS_MAP: Record<string, TechnicianProfile> = {
-  "tech-1": {
-    id: "tech-1",
-    userId: "u-tech-1",
-    bio: "Licensed Master Electrician & HVAC Specialist with over 8 years of residential and commercial service experience. Specialized in panel upgrades, wiring, and AC diagnostics.",
-    experienceYears: 8,
-    skills: ["Electrical", "HVAC", "Wiring", "Circuit Repair", "Panel Upgrade"],
+  "tech-bd-1": {
+    id: "tech-bd-1",
+    userId: "u-tech-bd-1",
+    bio: "Certified Electrical Engineer with 9 years of experience in Dhaka. Specialist in DB box installation, home rewiring, IPS/UPS setup, and emergency short-circuit repair.",
+    experienceYears: 9,
+    skills: ["Electrical", "IPS & Generator", "Circuit Repair", "DB Box Setup", "Substation"],
     avgRating: 4.9,
     verified: true,
     createdAt: new Date().toISOString(),
-    user: { id: "u-tech-1", name: "Alexander Wright", email: "tech@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    user: { id: "u-tech-bd-1", name: "Engr. Tanvir Ahmed", email: "tanvir.electric@gmail.com", phone: "+880 1712-345678", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
     services: [
       {
-        id: "srv-elec-1",
-        technicianId: "tech-1",
-        categoryId: "cat-electrical",
-        title: "Electrical Circuit Breaker & Panel Upgrade",
-        description: "Full diagnostic of electrical panel, breaker replacement, and safety grounding certification.",
-        price: 120.0,
+        id: "srv-bd-1",
+        technicianId: "tech-bd-1",
+        categoryId: "cat-elec",
+        title: "DB Box Installation & Full House Rewiring",
+        description: "Full diagnostic of distribution box, breaker replacement, and safety grounding certification.",
+        price: 35.0,
+        durationMinutes: 120,
+        createdAt: new Date().toISOString(),
+        category: { id: "cat-elec", name: "Electrical Services", createdAt: new Date().toISOString() },
+      },
+      {
+        id: "srv-bd-2",
+        technicianId: "tech-bd-1",
+        categoryId: "cat-elec",
+        title: "IPS & Generator Line Connection & Servicing",
+        description: "Instant Power Supply (IPS) wiring, battery fluid check, and automatic changeover switch setup.",
+        price: 25.0,
         durationMinutes: 90,
         createdAt: new Date().toISOString(),
-        category: { id: "cat-electrical", name: "Electrical Services", createdAt: new Date().toISOString() },
+        category: { id: "cat-elec", name: "Electrical Services", createdAt: new Date().toISOString() },
       },
+    ],
+    availability: [
+      { id: "slot-bd-1", technicianId: "tech-bd-1", date: new Date(Date.now() + 86400000).toISOString(), startTime: "09:00", endTime: "12:00", isBooked: false, createdAt: new Date().toISOString() },
+      { id: "slot-bd-2", technicianId: "tech-bd-1", date: new Date(Date.now() + 86400000).toISOString(), startTime: "14:00", endTime: "17:00", isBooked: false, createdAt: new Date().toISOString() },
+    ],
+    reviews: [
+      { id: "r1", bookingId: "b1", customerId: "c1", technicianId: "tech-bd-1", rating: 5, comment: "Re-wired our DB box perfectly in Uttara! Very professional engineer.", createdAt: new Date().toISOString(), customer: { id: "c1", name: "Tariqul Islam" } },
+    ],
+  },
+  "tech-bd-2": {
+    id: "tech-bd-2",
+    userId: "u-tech-bd-2",
+    bio: "Professional plumber serving Gulshan, Banani, and Dhanmondi areas. Expert in sanitary fitting, water pump repair, pipeline leak fixing, and gas line inspection.",
+    experienceYears: 7,
+    skills: ["Plumbing", "Sanitary Fitting", "Water Pump", "Pipe Leak Repair", "Gas Line"],
+    avgRating: 4.8,
+    verified: true,
+    createdAt: new Date().toISOString(),
+    user: { id: "u-tech-bd-2", name: "Md. Rafiqul Islam", email: "rafiq.plumbing@gmail.com", phone: "+880 1819-876543", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    services: [
       {
-        id: "srv-elec-2",
-        technicianId: "tech-1",
-        categoryId: "cat-electrical",
-        title: "Emergency Wiring & Outlet Repair",
-        description: "Troubleshooting short circuits, repairing sparky wall outlets, and fixture re-wiring.",
-        price: 85.0,
-        durationMinutes: 60,
+        id: "srv-bd-4",
+        technicianId: "tech-bd-2",
+        categoryId: "cat-plumb",
+        title: "Water Submersible Pump Repair & Unblocking",
+        description: "Roof tank motor repair, line pressure adjustment, and main underground pipe unblocking.",
+        price: 30.0,
+        durationMinutes: 90,
         createdAt: new Date().toISOString(),
-        category: { id: "cat-electrical", name: "Electrical Services", createdAt: new Date().toISOString() },
+        category: { id: "cat-plumb", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
       },
       {
-        id: "srv-hvac-1",
-        technicianId: "tech-1",
-        categoryId: "cat-hvac",
-        title: "AC Unit Deep Cleaning & Coolant Inspection",
-        description: "Filter replacement, coil washing, refrigerant level check, and thermostat calibration.",
-        price: 95.0,
+        id: "srv-bd-5",
+        technicianId: "tech-bd-2",
+        categoryId: "cat-plumb",
+        title: "Sanitary Fitting & Concealed Pipe Leak Sealing",
+        description: "Bathroom commode, basin, concealed shower mixer installation, and high-pressure leak sealing.",
+        price: 22.0,
         durationMinutes: 75,
+        createdAt: new Date().toISOString(),
+        category: { id: "cat-plumb", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
+      },
+    ],
+    availability: [
+      { id: "slot-bd-3", technicianId: "tech-bd-2", date: new Date(Date.now() + 86400000).toISOString(), startTime: "08:30", endTime: "11:30", isBooked: false, createdAt: new Date().toISOString() },
+      { id: "slot-bd-4", technicianId: "tech-bd-2", date: new Date(Date.now() + 172800000).toISOString(), startTime: "10:00", endTime: "13:00", isBooked: false, createdAt: new Date().toISOString() },
+    ],
+    reviews: [
+      { id: "r2", bookingId: "b2", customerId: "c2", technicianId: "tech-bd-2", rating: 5, comment: "Fixed our underground line leak fast. Great plumber!", createdAt: new Date().toISOString(), customer: { id: "c2", name: "Tariqul Islam" } },
+    ],
+  },
+  "tech-bd-3": {
+    id: "tech-bd-3",
+    userId: "u-tech-bd-3",
+    bio: "Certified Inverter AC technician with 8 years of experience. Specialist in jet wash master service, gas refill (R32/R410a), compressor repair, and split AC installation.",
+    experienceYears: 8,
+    skills: ["HVAC", "AC Master Wash", "Gas Refill", "Compressor Repair", "Inverter AC"],
+    avgRating: 4.9,
+    verified: true,
+    createdAt: new Date().toISOString(),
+    user: { id: "u-tech-bd-3", name: "Kazi Mahmud Hasan", email: "mahmud.acservice@gmail.com", phone: "+880 1911-234567", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    services: [
+      {
+        id: "srv-bd-3",
+        technicianId: "tech-bd-3",
+        categoryId: "cat-hvac",
+        title: "Inverter AC Master Jet Wash & Filter Cleaning",
+        description: "High-pressure chemical wash of indoor & outdoor units, drain pipe clearing, and airflow optimization.",
+        price: 20.0,
+        durationMinutes: 60,
         createdAt: new Date().toISOString(),
         category: { id: "cat-hvac", name: "HVAC & AC Service", createdAt: new Date().toISOString() },
       },
     ],
     availability: [
-      { id: "slot-1", technicianId: "tech-1", date: new Date(Date.now() + 86400000).toISOString(), startTime: "09:00", endTime: "12:00", isBooked: false, createdAt: new Date().toISOString() },
-      { id: "slot-2", technicianId: "tech-1", date: new Date(Date.now() + 86400000).toISOString(), startTime: "13:00", endTime: "16:00", isBooked: false, createdAt: new Date().toISOString() },
-      { id: "slot-3", technicianId: "tech-1", date: new Date(Date.now() + 172800000).toISOString(), startTime: "10:00", endTime: "13:00", isBooked: false, createdAt: new Date().toISOString() },
+      { id: "slot-bd-5", technicianId: "tech-bd-3", date: new Date(Date.now() + 86400000).toISOString(), startTime: "10:00", endTime: "13:00", isBooked: false, createdAt: new Date().toISOString() },
     ],
     reviews: [
-      { id: "r1", bookingId: "b1", customerId: "c1", technicianId: "tech-1", rating: 5, comment: "Fixed my circuit breaker within an hour. Excellent service!", createdAt: new Date().toISOString(), customer: { id: "c1", name: "David M." } },
-      { id: "r2", bookingId: "b2", customerId: "c2", technicianId: "tech-1", rating: 5, comment: "Punctual, professional, and very knowledgeable.", createdAt: new Date().toISOString(), customer: { id: "c2", name: "Emily R." } },
+      { id: "r3", bookingId: "b3", customerId: "c3", technicianId: "tech-bd-3", rating: 5, comment: "Master jet wash made the AC cool super fast!", createdAt: new Date().toISOString(), customer: { id: "c3", name: "Tariqul Islam" } },
     ],
   },
-  "tech-2": {
-    id: "tech-2",
-    userId: "u-tech-2",
-    bio: "Expert Plumbing & Piping Specialist specializing in emergency leak repair, drain clearing, faucet installation, and water heater servicing.",
-    experienceYears: 6,
-    skills: ["Plumbing", "Pipe Repair", "Drain Clearing", "Fixture Install", "Water Heater"],
-    avgRating: 4.8,
+  "tech-bd-4": {
+    id: "tech-bd-4",
+    userId: "u-tech-bd-4",
+    bio: "Skilled artisan with 10 years of experience in custom door fitting, modular kitchen cabinet crafting, furniture repair, and door lock installation.",
+    experienceYears: 10,
+    skills: ["Carpentry", "Kitchen Cabinet", "Door Lock Repair", "Furniture Polish", "Woodwork"],
+    avgRating: 5.0,
     verified: true,
     createdAt: new Date().toISOString(),
-    user: { id: "u-tech-2", name: "Sarah Jenkins", email: "tech2@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    user: { id: "u-tech-bd-4", name: "Naimur Rahman", email: "naimur.carpenter@gmail.com", phone: "+880 1615-998877", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
     services: [
       {
-        id: "srv-plumb-1",
-        technicianId: "tech-2",
-        categoryId: "cat-plumbing",
-        title: "Emergency Pipe Leak Repair & Sealing",
-        description: "Immediate response for bursting pipes, high-pressure sealing, and joint replacement.",
-        price: 110.0,
-        durationMinutes: 60,
-        createdAt: new Date().toISOString(),
-        category: { id: "cat-plumbing", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
-      },
-      {
-        id: "srv-plumb-2",
-        technicianId: "tech-2",
-        categoryId: "cat-plumbing",
-        title: "Kitchen Faucet & Drain Unblocking",
-        description: "Clogged sink restoration, faucet replacement, garbage disposal maintenance.",
-        price: 75.0,
-        durationMinutes: 45,
-        createdAt: new Date().toISOString(),
-        category: { id: "cat-plumbing", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
-      },
-      {
-        id: "srv-carp-1",
-        technicianId: "tech-2",
+        id: "srv-bd-6",
+        technicianId: "tech-bd-4",
         categoryId: "cat-carpentry",
-        title: "Custom Furniture Assembly & Cabinet Repair",
-        description: "IKEA and custom furniture assembly, cabinet door hinge adjustment, and drawer slide alignment.",
-        price: 70.0,
+        title: "Modular Kitchen Cabinet Repair & Lock Fitting",
+        description: "Soft-close hinge adjustment, hydraulic stay lift installation, and security lock replacement.",
+        price: 20.0,
         durationMinutes: 60,
         createdAt: new Date().toISOString(),
-        category: { id: "cat-carpentry", name: "Carpentry & Repairs", createdAt: new Date().toISOString() },
+        category: { id: "cat-carpentry", name: "Carpentry & Handyman", createdAt: new Date().toISOString() },
       },
     ],
     availability: [
-      { id: "slot-4", technicianId: "tech-2", date: new Date(Date.now() + 86400000).toISOString(), startTime: "08:30", endTime: "11:30", isBooked: false, createdAt: new Date().toISOString() },
-      { id: "slot-5", technicianId: "tech-2", date: new Date(Date.now() + 86400000).toISOString(), startTime: "14:00", endTime: "17:00", isBooked: false, createdAt: new Date().toISOString() },
-      { id: "slot-6", technicianId: "tech-2", date: new Date(Date.now() + 172800000).toISOString(), startTime: "09:00", endTime: "12:00", isBooked: false, createdAt: new Date().toISOString() },
+      { id: "slot-bd-6", technicianId: "tech-bd-4", date: new Date(Date.now() + 86400000).toISOString(), startTime: "11:00", endTime: "14:00", isBooked: false, createdAt: new Date().toISOString() },
     ],
     reviews: [
-      { id: "r3", bookingId: "b3", customerId: "c3", technicianId: "tech-2", rating: 5, comment: "Resolved our kitchen leak quickly. Highly recommended!", createdAt: new Date().toISOString(), customer: { id: "c3", name: "Michael B." } },
+      { id: "r4", bookingId: "b4", customerId: "c4", technicianId: "tech-bd-4", rating: 5, comment: "Top quality woodwork and cabinet lock fitting.", createdAt: new Date().toISOString(), customer: { id: "c4", name: "Tariqul Islam" } },
     ],
   },
 };
@@ -164,7 +200,7 @@ export default function TechnicianDetailPage() {
             setSelectedServiceId(data.services[0].id);
           }
         } else {
-          const fallback = FALLBACK_TECHNICIANS_MAP[technicianId] || FALLBACK_TECHNICIANS_MAP["tech-1"];
+          const fallback = FALLBACK_TECHNICIANS_MAP[technicianId] || FALLBACK_TECHNICIANS_MAP["tech-bd-1"];
           setTechnician(fallback);
           if (!preselectedServiceId && fallback.services?.[0]) {
             setSelectedServiceId(fallback.services[0].id);
@@ -172,7 +208,7 @@ export default function TechnicianDetailPage() {
         }
       } catch (err: any) {
         console.error("Error fetching technician from API:", err);
-        const fallback = FALLBACK_TECHNICIANS_MAP[technicianId] || FALLBACK_TECHNICIANS_MAP["tech-1"];
+        const fallback = FALLBACK_TECHNICIANS_MAP[technicianId] || FALLBACK_TECHNICIANS_MAP["tech-bd-1"];
         setTechnician(fallback);
         if (!preselectedServiceId && fallback.services?.[0]) {
           setSelectedServiceId(fallback.services[0].id);
@@ -292,6 +328,9 @@ export default function TechnicianDetailPage() {
                 </span>
                 <span className="flex items-center gap-1 text-indigo-400">
                   <Award className="w-4 h-4" /> {technician.experienceYears} Years Experience
+                </span>
+                <span className="flex items-center gap-1 text-slate-300 font-mono">
+                  <Phone className="w-3.5 h-3.5 text-emerald-400" /> {technician.user?.phone || "+880 1700-000000"}
                 </span>
                 <span className="flex items-center gap-1 text-slate-400">
                   <MessageSquare className="w-4 h-4" /> {technician.reviews?.length || 0} Reviews
@@ -519,7 +558,7 @@ export default function TechnicianDetailPage() {
                   type="text"
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
-                  placeholder="123 Main St, Apartment 4B"
+                  placeholder="House 42, Road 11, Block D, Mirpur, Dhaka"
                   required
                   className="w-full bg-slate-900 text-white placeholder-slate-500 text-xs rounded-xl px-3 py-3 border border-slate-800 focus:border-indigo-500 focus:outline-none"
                 />

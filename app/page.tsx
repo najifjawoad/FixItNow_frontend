@@ -19,87 +19,122 @@ import {
 
 const FALLBACK_SERVICES: Service[] = [
   {
-    id: "srv-1",
-    technicianId: "tech-1",
-    categoryId: "cat-1",
-    title: "Electrical Circuit Breaker & Panel Upgrade",
-    description: "Full diagnostic of electrical panel, breaker replacement, and safety grounding certification.",
-    price: 120.0,
+    id: "srv-bd-1",
+    technicianId: "tech-bd-1",
+    categoryId: "cat-elec",
+    title: "DB Box Installation & Full House Rewiring",
+    description: "Full diagnostic of distribution box, breaker replacement, and safety grounding certification.",
+    price: 35.0,
+    durationMinutes: 120,
+    createdAt: new Date().toISOString(),
+    category: { id: "cat-elec", name: "Electrical Services", createdAt: new Date().toISOString() },
+  },
+  {
+    id: "srv-bd-2",
+    technicianId: "tech-bd-1",
+    categoryId: "cat-elec",
+    title: "IPS & Generator Line Connection & Servicing",
+    description: "Instant Power Supply (IPS) wiring, battery fluid check, and automatic changeover switch setup.",
+    price: 25.0,
     durationMinutes: 90,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-1", name: "Electrical Services", createdAt: new Date().toISOString() },
+    category: { id: "cat-elec", name: "Electrical Services", createdAt: new Date().toISOString() },
   },
   {
-    id: "srv-2",
-    technicianId: "tech-1",
-    categoryId: "cat-1",
-    title: "Emergency Wiring & Outlet Repair",
-    description: "Troubleshooting short circuits, repairing sparky wall outlets, and fixture re-wiring.",
-    price: 85.0,
+    id: "srv-bd-3",
+    technicianId: "tech-bd-3",
+    categoryId: "cat-hvac",
+    title: "Inverter AC Master Jet Wash & Filter Cleaning",
+    description: "High-pressure chemical wash of indoor & outdoor units, drain pipe clearing, and airflow optimization.",
+    price: 20.0,
     durationMinutes: 60,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-1", name: "Electrical Services", createdAt: new Date().toISOString() },
+    category: { id: "cat-hvac", name: "HVAC & AC Service", createdAt: new Date().toISOString() },
   },
   {
-    id: "srv-3",
-    technicianId: "tech-1",
-    categoryId: "cat-3",
-    title: "AC Unit Deep Cleaning & Coolant Inspection",
-    description: "Filter replacement, coil washing, refrigerant level check, and thermostat calibration.",
-    price: 95.0,
+    id: "srv-bd-4",
+    technicianId: "tech-bd-2",
+    categoryId: "cat-plumb",
+    title: "Water Submersible Pump Repair & Unblocking",
+    description: "Roof tank motor repair, line pressure adjustment, and main underground pipe unblocking.",
+    price: 30.0,
+    durationMinutes: 90,
+    createdAt: new Date().toISOString(),
+    category: { id: "cat-plumb", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
+  },
+  {
+    id: "srv-bd-5",
+    technicianId: "tech-bd-2",
+    categoryId: "cat-plumb",
+    title: "Sanitary Fitting & Concealed Pipe Leak Sealing",
+    description: "Bathroom commode, basin, concealed shower mixer installation, and high-pressure leak sealing.",
+    price: 22.0,
     durationMinutes: 75,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-3", name: "HVAC & AC Service", createdAt: new Date().toISOString() },
+    category: { id: "cat-plumb", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
   },
   {
-    id: "srv-4",
-    technicianId: "tech-2",
-    categoryId: "cat-2",
-    title: "Emergency Pipe Leak Repair & Sealing",
-    description: "Immediate response for bursting pipes, high-pressure sealing, and joint replacement.",
-    price: 110.0,
+    id: "srv-bd-6",
+    technicianId: "tech-bd-4",
+    categoryId: "cat-carpentry",
+    title: "Modular Kitchen Cabinet Repair & Lock Fitting",
+    description: "Soft-close hinge adjustment, hydraulic stay lift installation, and security lock replacement.",
+    price: 20.0,
     durationMinutes: 60,
     createdAt: new Date().toISOString(),
-    category: { id: "cat-2", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
-  },
-  {
-    id: "srv-5",
-    technicianId: "tech-2",
-    categoryId: "cat-2",
-    title: "Kitchen Faucet & Drain Unblocking",
-    description: "Clogged sink restoration, faucet replacement, garbage disposal maintenance.",
-    price: 75.0,
-    durationMinutes: 45,
-    createdAt: new Date().toISOString(),
-    category: { id: "cat-2", name: "Plumbing & Piping", createdAt: new Date().toISOString() },
+    category: { id: "cat-carpentry", name: "Carpentry & Handyman", createdAt: new Date().toISOString() },
   },
 ];
 
 const FALLBACK_TECHNICIANS: TechnicianProfile[] = [
   {
-    id: "tech-1",
-    userId: "u-tech-1",
-    bio: "Licensed Master Electrician & HVAC Specialist with over 8 years of residential and commercial service experience.",
-    experienceYears: 8,
-    skills: ["Electrical", "HVAC", "Wiring", "Circuit Repair"],
+    id: "tech-bd-1",
+    userId: "u-tech-bd-1",
+    bio: "Certified Electrical Engineer with 9 years of experience in Dhaka. Specialist in DB box installation, home rewiring, IPS/UPS setup, and emergency short-circuit repair.",
+    experienceYears: 9,
+    skills: ["Electrical", "IPS & Generator", "Circuit Repair", "DB Box Setup"],
     avgRating: 4.9,
     verified: true,
     createdAt: new Date().toISOString(),
-    user: { id: "u-tech-1", name: "Alexander Wright", email: "tech@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
-    reviews: [{ id: "r1", bookingId: "b1", customerId: "c1", technicianId: "tech-1", rating: 5, comment: "Excellent work!", createdAt: new Date().toISOString() }]
+    user: { id: "u-tech-bd-1", name: "Engr. Tanvir Ahmed", email: "tanvir.electric@gmail.com", phone: "+880 1712-345678", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    reviews: [{ id: "r1", bookingId: "b1", customerId: "c1", technicianId: "tech-bd-1", rating: 5, comment: "Re-wired our DB box perfectly!", createdAt: new Date().toISOString() }],
   },
   {
-    id: "tech-2",
-    userId: "u-tech-2",
-    bio: "Expert Plumbing & Piping Specialist specializing in emergency leak repair, drain clearing, and fixture installation.",
-    experienceYears: 6,
-    skills: ["Plumbing", "Pipe Repair", "Drain Clearing", "Fixture Install"],
+    id: "tech-bd-2",
+    userId: "u-tech-bd-2",
+    bio: "Professional plumber serving Gulshan, Banani, and Dhanmondi areas. Expert in sanitary fitting, water pump repair, pipeline leak fixing, and gas line inspection.",
+    experienceYears: 7,
+    skills: ["Plumbing", "Sanitary Fitting", "Water Pump", "Pipe Leak Repair"],
     avgRating: 4.8,
     verified: true,
     createdAt: new Date().toISOString(),
-    user: { id: "u-tech-2", name: "Sarah Jenkins", email: "tech2@fixitnow.com", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
-    reviews: [{ id: "r2", bookingId: "b2", customerId: "c2", technicianId: "tech-2", rating: 5, comment: "Fast and professional!", createdAt: new Date().toISOString() }]
-  }
+    user: { id: "u-tech-bd-2", name: "Md. Rafiqul Islam", email: "rafiq.plumbing@gmail.com", phone: "+880 1819-876543", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    reviews: [{ id: "r2", bookingId: "b2", customerId: "c2", technicianId: "tech-bd-2", rating: 5, comment: "Unblocked our underground water line quickly.", createdAt: new Date().toISOString() }],
+  },
+  {
+    id: "tech-bd-3",
+    userId: "u-tech-bd-3",
+    bio: "Certified Inverter AC technician with 8 years of experience. Specialist in jet wash master service, gas refill (R32/R410a), compressor repair, and split AC installation.",
+    experienceYears: 8,
+    skills: ["HVAC", "AC Master Wash", "Gas Refill", "Compressor Repair"],
+    avgRating: 4.9,
+    verified: true,
+    createdAt: new Date().toISOString(),
+    user: { id: "u-tech-bd-3", name: "Kazi Mahmud Hasan", email: "mahmud.acservice@gmail.com", phone: "+880 1911-234567", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    reviews: [{ id: "r3", bookingId: "b3", customerId: "c3", technicianId: "tech-bd-3", rating: 5, comment: "Master jet wash made the AC cooling like new!", createdAt: new Date().toISOString() }],
+  },
+  {
+    id: "tech-bd-4",
+    userId: "u-tech-bd-4",
+    bio: "Skilled artisan with 10 years of experience in custom door fitting, modular kitchen cabinet crafting, furniture repair, and door lock installation.",
+    experienceYears: 10,
+    skills: ["Carpentry", "Kitchen Cabinet", "Door Lock Repair", "Furniture Polish"],
+    avgRating: 5.0,
+    verified: true,
+    createdAt: new Date().toISOString(),
+    user: { id: "u-tech-bd-4", name: "Naimur Rahman", email: "naimur.carpenter@gmail.com", phone: "+880 1615-998877", role: "TECHNICIAN", status: "ACTIVE", createdAt: new Date().toISOString() },
+    reviews: [{ id: "r4", bookingId: "b4", customerId: "c4", technicianId: "tech-bd-4", rating: 5, comment: "Top quality woodwork and cabinet lock fitting.", createdAt: new Date().toISOString() }],
+  },
 ];
 
 export default function HomePage() {
@@ -163,7 +198,7 @@ export default function HomePage() {
         
         <div className="max-w-3xl space-y-6">
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-indigo-500/10 border border-indigo-500/30 text-indigo-300 text-xs font-semibold uppercase tracking-wider">
-            <Sparkles className="w-4 h-4 text-indigo-400" /> #1 Home Services Marketplace
+            <Sparkles className="w-4 h-4 text-indigo-400" /> #1 Home Services Marketplace in Bangladesh
           </div>
 
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-tight">
@@ -171,7 +206,7 @@ export default function HomePage() {
           </h1>
 
           <p className="text-base sm:text-lg text-slate-300 leading-relaxed">
-            From emergency electrical fixes and pipe repairs to HVAC maintenance, connect with background-verified technicians and book guaranteed time slots.
+            From emergency electrical fixes & IPS rewiring to AC jet wash and water pump repairs, connect with verified Bangladeshi technicians and book time slots instantly.
           </p>
 
           {/* Quick Search Bar */}
@@ -189,7 +224,7 @@ export default function HomePage() {
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="What service do you need? (e.g. Electrical, Plumbing)..."
+                  placeholder="What service do you need? (e.g. AC Jet Wash, IPS Wiring)..."
                   className="w-full bg-transparent text-white placeholder-slate-400 text-sm pl-12 pr-4 py-3 focus:outline-none"
                 />
               </div>
@@ -206,7 +241,7 @@ export default function HomePage() {
           <div className="pt-4 flex flex-wrap items-center gap-6 text-xs text-slate-300">
             <div className="flex items-center gap-2">
               <ShieldCheck className="w-4 h-4 text-emerald-400" />
-              <span>100% Background Checked</span>
+              <span>100% Background Verified</span>
             </div>
             <div className="flex items-center gap-2">
               <CreditCard className="w-4 h-4 text-indigo-400" />
@@ -214,7 +249,7 @@ export default function HomePage() {
             </div>
             <div className="flex items-center gap-2">
               <Star className="w-4 h-4 text-amber-400 fill-amber-400" />
-              <span>4.9/5 Average Rating</span>
+              <span>4.9/5 Average Customer Rating</span>
             </div>
           </div>
         </div>
@@ -225,7 +260,7 @@ export default function HomePage() {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-2xl font-bold text-white tracking-tight">Explore Categories</h2>
-            <p className="text-sm text-slate-400 mt-1">Select a category to view specialized solutions</p>
+            <p className="text-sm text-slate-400 mt-1">Select a category to view specialized Bangladeshi experts</p>
           </div>
           <Link href="/services" className="text-sm font-semibold text-indigo-400 hover:text-indigo-300 flex items-center gap-1">
             View All <ArrowRight className="w-4 h-4" />
@@ -256,10 +291,10 @@ export default function HomePage() {
           ) : (
             // Default categories fallback
             [
-              { name: "Electrical Services", desc: "Wiring, circuit breaker repair, outlet installs" },
-              { name: "Plumbing & Piping", desc: "Leak fixes, pipe replacements, drain clearing" },
-              { name: "HVAC & AC Service", desc: "Air conditioning, furnace repair, duct cleaning" },
-              { name: "Carpentry & Repairs", desc: "Custom furniture repair, door & lock installation" },
+              { name: "Electrical Services", desc: "DB box, IPS setup, wiring, breaker repairs" },
+              { name: "Plumbing & Piping", desc: "Water pump, concealed pipe leak, sanitary fittings" },
+              { name: "HVAC & AC Service", desc: "Inverter AC jet wash, gas refill, compressor repair" },
+              { name: "Carpentry & Handyman", desc: "Kitchen cabinet craft, door locks, furniture polish" },
             ].map((cat, idx) => (
               <Link
                 key={idx}
@@ -344,7 +379,7 @@ export default function HomePage() {
         <div className="flex items-end justify-between">
           <div>
             <h2 className="text-2xl font-bold text-white tracking-tight">Top-Rated Technicians</h2>
-            <p className="text-sm text-slate-400 mt-1">Hire verified professionals with proven customer reviews</p>
+            <p className="text-sm text-slate-400 mt-1">Hire verified Bangladeshi professionals with proven customer reviews</p>
           </div>
         </div>
 
@@ -363,6 +398,7 @@ export default function HomePage() {
                   <div>
                     <h3 className="font-bold text-white text-base">{tech.user?.name || "Verified Technician"}</h3>
                     <p className="text-xs text-indigo-400 font-medium">{tech.experienceYears} Years Experience</p>
+                    <p className="text-[10px] text-slate-400 font-mono mt-0.5">{tech.user?.phone || ""}</p>
                   </div>
 
                   <div className="flex items-center justify-center gap-1 text-amber-400 text-xs font-semibold">
@@ -389,7 +425,7 @@ export default function HomePage() {
                     href={`/technicians/${tech.id}`}
                     className="w-full block py-2.5 rounded-xl bg-slate-800 hover:bg-indigo-600 text-slate-200 hover:text-white font-semibold text-xs transition-all border border-slate-700"
                   >
-                    View Profile & Availability
+                    View Profile & Schedule
                   </Link>
                 </div>
               </div>

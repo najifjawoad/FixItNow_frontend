@@ -4,15 +4,29 @@ FixItNow is a modern, responsive Next.js (App Router) frontend application for a
 
 ---
 
-## 🔑 Working Test Credentials
+## 🔑 Working Demo Credentials (Bangladeshi Demo Profiles)
 
-| Role | Email | Password | Access / Permissions |
-| :--- | :--- | :--- | :--- |
-| **Admin** | `admin123@gmail.com` | `12345` | Platform overview metrics, User management (Ban/Unban), Service Categories |
-| **Technician / Provider** | `tech@fixitnow.com` | `password123` | Provider dashboard, Accept/Decline requests, Availability calendar, Add services |
-| **Customer / Tenant** | `customer@fixitnow.com` | `password123` | Browse services, Time-slot booking modal, Stripe payment checkout, Rate & Review |
+| Role | Email | Password | Phone | Name / Specialization |
+| :--- | :--- | :--- | :--- | :--- |
+| **Admin** | `admin123@gmail.com` | `12345` | `+880 1700-000000` | Platform Admin |
+| **Customer** | `customer@fixitnow.com` | `password123` | `+880 1711-998877` | Tariqul Islam (Dhaka Tenant) |
+| **Technician (Electrical)** | `tanvir.electric@gmail.com` | `password123` | `+880 1712-345678` | Engr. Tanvir Ahmed (DB Box & IPS) |
+| **Technician (Plumbing)** | `rafiq.plumbing@gmail.com` | `password123` | `+880 1819-876543` | Md. Rafiqul Islam (Sanitary & Pumps) |
+| **Technician (HVAC / AC)** | `mahmud.acservice@gmail.com` | `password123` | `+880 1911-234567` | Kazi Mahmud Hasan (Inverter AC Jet Wash) |
+| **Technician (Carpentry)** | `naimur.carpenter@gmail.com` | `password123` | `+880 1615-998877` | Naimur Rahman (Cabinet & Locks) |
 
-*(Note: You can also use the **Quick Demo Buttons** on the `/auth/login` page to autofill these credentials with a single click).*
+*(Note: You can also use the **Quick Demo Buttons** on the `/auth/login` page to autofill credentials with a single click).*
+
+---
+
+## 🇧🇩 Bangladeshi Demo Services Included
+
+1. **DB Box Installation & Full House Rewiring** (`৳1,500 / $35.00`) - Engr. Tanvir Ahmed
+2. **IPS & Generator Line Connection & Servicing** (`৳1,200 / $25.00`) - Engr. Tanvir Ahmed
+3. **Water Submersible Pump Repair & Unblocking** (`৳1,400 / $30.00`) - Md. Rafiqul Islam
+4. **Sanitary Fitting & Concealed Pipe Leak Sealing** (`৳1,100 / $22.00`) - Md. Rafiqul Islam
+5. **Inverter AC Master Jet Wash & Filter Cleaning** (`৳1,000 / $20.00`) - Kazi Mahmud Hasan
+6. **Modular Kitchen Cabinet Repair & Lock Fitting** (`৳900 / $20.00`) - Naimur Rahman
 
 ---
 
