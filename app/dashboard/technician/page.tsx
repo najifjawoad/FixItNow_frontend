@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { api } from "@/lib/api/client";
-import { Booking, BookingStatus } from "@/types";
+import { Booking, BookingStatus, Service } from "@/types";
 import { StatusBadge } from "@/components/ui/status-badge";
 import { TableRowSkeleton } from "@/components/ui/skeleton";
 import toast from "react-hot-toast";
@@ -18,13 +18,31 @@ import {
   TrendingUp,
   Star,
   MessageSquare,
+  Wrench,
+  Pencil,
+  Trash2,
+  X,
+  Loader2,
 } from "lucide-react";
 
 export default function TechnicianDashboard() {
   const { user } = useAuth();
+
+  // Bookings state
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+
+  // My Services state
+  const [myServices, setMyServices] = useState<Service[]>([]);
+  const [loadingServices, setLoadingServices] = useState(true);
+  const [editingService, setEditingService] = useState<Service | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editPrice, setEditPrice] = useState("");
+  const [editDuration, setEditDuration] = useState(60);
+  const [editDescription, setEditDescription] = useState("");
+  const [savingEdit, setSavingEdit] = useState(false);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const fetchTechnicianBookings = async () => {
     try {
@@ -40,8 +58,22 @@ export default function TechnicianDashboard() {
     }
   };
 
+  const fetchMyServices = async () => {
+    try {
+      setLoadingServices(true);
+      const res = await api.get("/technician/my-services");
+      const data = Array.isArray(res) ? res : res?.data || [];
+      setMyServices(data);
+    } catch (err: any) {
+      console.error("Failed to load technician services:", err);
+    } finally {
+      setLoadingServices(false);
+    }
+  };
+
   useEffect(() => {
     fetchTechnicianBookings();
+    fetchMyServices();
   }, []);
 
   // Update Booking Status Handler
@@ -58,6 +90,61 @@ export default function TechnicianDashboard() {
       toast.error(err.message || `Failed to update status to ${newStatus}`);
     } finally {
       setUpdatingId(null);
+    }
+  };
+
+  // Edit Service Handler
+  const handleOpenEditModal = (service: Service) => {
+    setEditingService(service);
+    setEditTitle(service.title);
+    setEditPrice(String(service.price));
+    setEditDuration(service.durationMinutes);
+    setEditDescription(service.description || "");
+  };
+
+  const handleSaveServiceEdit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingService) return;
+    if (!editTitle.trim()) {
+      toast.error("Service title is required");
+      return;
+    }
+    if (!editPrice || Number(editPrice) <= 0) {
+      toast.error("Price must be greater than 0");
+      return;
+    }
+
+    setSavingEdit(true);
+    try {
+      await api.patch(`/technician/services/${editingService.id}`, {
+        title: editTitle,
+        price: Number(editPrice),
+        durationMinutes: Number(editDuration),
+        description: editDescription || undefined,
+      });
+
+      toast.success("Service package updated successfully!");
+      setEditingService(null);
+      fetchMyServices();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to update service package");
+    } finally {
+      setSavingEdit(false);
+    }
+  };
+
+  // Delete Service Handler
+  const handleDeleteService = async (serviceId: string) => {
+    if (!confirm("Are you sure you want to delete this service package?")) return;
+    setDeletingId(serviceId);
+    try {
+      await api.delete(`/technician/services/${serviceId}`);
+      toast.success("Service package deleted successfully!");
+      fetchMyServices();
+    } catch (err: any) {
+      toast.error(err.message || "Failed to delete service package");
+    } finally {
+      setDeletingId(null);
     }
   };
 
@@ -89,19 +176,28 @@ export default function TechnicianDashboard() {
   return (
     <div className="space-y-8 pb-12">
       {/* Header Banner */}
-      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="glass-panel p-6 sm:p-8 rounded-3xl border border-slate-800 flex flex-col lg:flex-row lg:items-center justify-between gap-4">
         <div>
           <span className="text-xs font-semibold text-amber-400 uppercase tracking-wider block mb-1">
             Provider Dashboard
           </span>
           <h1 className="text-2xl sm:text-3xl font-extrabold text-white">Technician Portal: {user?.name}</h1>
-          <p className="text-xs text-slate-400 mt-1">Manage incoming booking requests, update job statuses, and track your customer reviews.</p>
+          <p className="text-xs text-slate-400 mt-1">Manage incoming booking requests, update job statuses, and edit your service offerings.</p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <button
+            onClick={() => {
+              const el = document.getElementById("my-services-section");
+              if (el) el.scrollIntoView({ behavior: "smooth" });
+            }}
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold text-xs transition-colors border border-slate-700 flex items-center gap-1.5 shadow-sm"
+          >
+            <Wrench className="w-4 h-4 text-indigo-400" /> My Services ({myServices.length})
+          </button>
           <Link
             href="/dashboard/technician/availability"
-            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-semibold text-xs transition-colors border border-slate-700 flex items-center gap-1.5"
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-amber-300 font-semibold text-xs transition-colors border border-slate-700 flex items-center gap-1.5 shadow-sm"
           >
             <Calendar className="w-4 h-4" /> Manage Availability
           </Link>
@@ -166,6 +262,76 @@ export default function TechnicianDashboard() {
           </div>
         </div>
       </div>
+
+      {/* NEW: My Published Services & Job Postings Section */}
+      <section id="my-services-section" className="glass-card rounded-2xl border border-slate-800 overflow-hidden space-y-4 p-6 scroll-mt-6">
+        <div className="flex items-center justify-between border-b border-slate-800 pb-4">
+          <div>
+            <h2 className="text-lg font-bold text-white flex items-center gap-2">
+              <Wrench className="w-5 h-5 text-indigo-400" /> My Published Services & Job Postings
+            </h2>
+            <p className="text-xs text-slate-400 mt-0.5">Manage your active service packages, edit pricing, or remove outdated listings</p>
+          </div>
+
+          <Link
+            href="/dashboard/technician/services"
+            className="px-3 py-1.5 rounded-lg bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-colors flex items-center gap-1"
+          >
+            <Plus className="w-3.5 h-3.5" /> Post New Service
+          </Link>
+        </div>
+
+        {loadingServices ? (
+          <div className="p-8 text-center text-xs text-slate-400">Loading your published service packages...</div>
+        ) : myServices.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {myServices.map((service) => (
+              <div key={service.id} className="p-5 rounded-2xl bg-slate-900/90 border border-slate-800 flex flex-col justify-between space-y-3">
+                <div className="space-y-2">
+                  <div className="flex justify-between items-start">
+                    <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-300 border border-indigo-500/20">
+                      {service.category?.name || "Service"}
+                    </span>
+                    <span className="text-base font-extrabold text-white">${Number(service.price).toFixed(2)}</span>
+                  </div>
+
+                  <h3 className="font-bold text-white text-sm leading-snug">{service.title}</h3>
+                  <p className="text-xs text-slate-400 line-clamp-2 leading-relaxed">{service.description || "No description provided."}</p>
+                  
+                  <div className="text-[11px] text-slate-400 flex items-center gap-1 pt-1">
+                    <Clock className="w-3.5 h-3.5 text-indigo-400" /> {service.durationMinutes} mins estimated duration
+                  </div>
+                </div>
+
+                <div className="pt-3 border-t border-slate-800/80 flex items-center justify-end gap-2">
+                  <button
+                    onClick={() => handleOpenEditModal(service)}
+                    className="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-indigo-300 font-semibold text-xs transition-colors flex items-center gap-1 border border-slate-700"
+                  >
+                    <Pencil className="w-3.5 h-3.5" /> Edit
+                  </button>
+
+                  <button
+                    onClick={() => handleDeleteService(service.id)}
+                    disabled={deletingId === service.id}
+                    className="px-3 py-1.5 rounded-xl bg-rose-950/40 hover:bg-rose-900/60 text-rose-300 font-semibold text-xs transition-colors flex items-center gap-1 border border-rose-800/50 disabled:opacity-50"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" /> {deletingId === service.id ? "Deleting..." : "Delete"}
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="p-8 text-center text-slate-400 bg-slate-900/40 rounded-xl border border-slate-800">
+            <Wrench className="w-8 h-8 text-slate-600 mx-auto mb-2" />
+            <p className="font-semibold text-slate-300 text-sm">No Published Services Found</p>
+            <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
+              You haven&apos;t published any custom service packages yet. Click &quot;Post New Service&quot; to list your rates!
+            </p>
+          </div>
+        )}
+      </section>
 
       {/* Booking Requests Table */}
       <section className="glass-card rounded-2xl border border-slate-800 overflow-hidden space-y-4 p-6">
@@ -300,7 +466,7 @@ export default function TechnicianDashboard() {
         </div>
       </section>
 
-      {/* NEW: Customer Reviews & Ratings Received Segment */}
+      {/* Customer Reviews & Ratings Received Segment */}
       <section className="glass-card rounded-2xl border border-slate-800 overflow-hidden space-y-4 p-6">
         <div className="flex items-center justify-between border-b border-slate-800 pb-4">
           <div>
@@ -371,6 +537,100 @@ export default function TechnicianDashboard() {
           </table>
         </div>
       </section>
+
+      {/* Edit Service Modal */}
+      {editingService && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
+          <div className="glass-card w-full max-w-md rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-2xl relative space-y-6">
+            <button
+              onClick={() => setEditingService(null)}
+              className="absolute right-5 top-5 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white"
+            >
+              <X className="w-5 h-5" />
+            </button>
+
+            <div>
+              <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
+                <Pencil className="w-5 h-5 text-indigo-400" /> Edit Service Offering
+              </h2>
+              <p className="text-xs text-slate-400 mt-1">Update title, pricing, and duration for your service package</p>
+            </div>
+
+            <form onSubmit={handleSaveServiceEdit} className="space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                  Service Title *
+                </label>
+                <input
+                  type="text"
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  required
+                  className="w-full bg-slate-900 text-white text-xs rounded-xl p-3 border border-slate-800 focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                    Price ($) *
+                  </label>
+                  <input
+                    type="number"
+                    step="0.01"
+                    min="1"
+                    value={editPrice}
+                    onChange={(e) => setEditPrice(e.target.value)}
+                    required
+                    className="w-full bg-slate-900 text-white text-xs rounded-xl p-3 border border-slate-800 focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                    Duration (Mins) *
+                  </label>
+                  <input
+                    type="number"
+                    step="15"
+                    min="15"
+                    value={editDuration}
+                    onChange={(e) => setEditDuration(Number(e.target.value))}
+                    required
+                    className="w-full bg-slate-900 text-white text-xs rounded-xl p-3 border border-slate-800 focus:border-indigo-500 focus:outline-none"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1">
+                  Description
+                </label>
+                <textarea
+                  rows={3}
+                  value={editDescription}
+                  onChange={(e) => setEditDescription(e.target.value)}
+                  className="w-full bg-slate-900 text-white text-xs rounded-xl p-3 border border-slate-800 focus:border-indigo-500 focus:outline-none"
+                />
+              </div>
+
+              <button
+                type="submit"
+                disabled={savingEdit}
+                className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2 text-xs disabled:opacity-50"
+              >
+                {savingEdit ? (
+                  <>
+                    <Loader2 className="w-4 h-4 animate-spin" /> Saving Changes...
+                  </>
+                ) : (
+                  "Save & Update Service Offering"
+                )}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
