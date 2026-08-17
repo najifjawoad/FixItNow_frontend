@@ -86,6 +86,22 @@ export default function CustomerDashboard() {
   useEffect(() => {
     fetchBookings();
     fetchPayments();
+
+    const handleFocus = () => {
+      fetchBookings();
+      fetchPayments();
+    };
+    window.addEventListener("focus", handleFocus);
+
+    const intervalId = setInterval(() => {
+      fetchBookings();
+      fetchPayments();
+    }, 15000);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      clearInterval(intervalId);
+    };
   }, []);
 
   // Initiate Stripe Payment Flow

@@ -273,9 +273,8 @@ export default function TechnicianDetailPage() {
       setIsModalOpen(false);
       router.push("/dashboard/customer");
     } catch (err: any) {
-      toast.success("Booking request submitted! Redirecting to customer dashboard...");
-      setIsModalOpen(false);
-      router.push("/dashboard/customer");
+      console.error("Failed to submit booking request:", err);
+      toast.error(err.message || "Failed to submit booking request. Please select a valid open slot.");
     } finally {
       setBookingLoading(false);
     }

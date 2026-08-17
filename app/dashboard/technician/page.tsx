@@ -23,6 +23,7 @@ import {
   Trash2,
   X,
   Loader2,
+  RefreshCw,
 } from "lucide-react";
 
 export default function TechnicianDashboard() {
@@ -31,6 +32,7 @@ export default function TechnicianDashboard() {
   // Bookings state
   const [bookings, setBookings] = useState<Booking[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
   const [updatingId, setUpdatingId] = useState<string | null>(null);
 
   // My Services state
@@ -44,17 +46,25 @@ export default function TechnicianDashboard() {
   const [savingEdit, setSavingEdit] = useState(false);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
-  const fetchTechnicianBookings = async () => {
+  const fetchTechnicianBookings = async (isManualRefresh = false) => {
     try {
-      setLoading(true);
+      if (isManualRefresh) setRefreshing(true);
+      else if (bookings.length === 0) setLoading(true);
+
       const res = await api.get("/users/get-my-bookings");
       const data = Array.isArray(res) ? res : res?.data || [];
       setBookings(data);
+      if (isManualRefresh) {
+        toast.success("Booking requests updated!");
+      }
     } catch (err: any) {
       console.error("Failed to load technician bookings:", err);
-      toast.error(err.message || "Failed to load booking requests");
+      if (isManualRefresh) {
+        toast.error(err.message || "Failed to load booking requests");
+      }
     } finally {
       setLoading(false);
+      setRefreshing(false);
     }
   };
 
@@ -74,6 +84,19 @@ export default function TechnicianDashboard() {
   useEffect(() => {
     fetchTechnicianBookings();
     fetchMyServices();
+
+    // Auto-refetch when window gains focus or on periodic interval (every 15s)
+    const handleFocus = () => fetchTechnicianBookings();
+    window.addEventListener("focus", handleFocus);
+
+    const intervalId = setInterval(() => {
+      fetchTechnicianBookings();
+    }, 15000);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+      clearInterval(intervalId);
+    };
   }, []);
 
   // Update Booking Status Handler
@@ -186,6 +209,14 @@ export default function TechnicianDashboard() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2 sm:gap-3">
+          <button
+            onClick={() => fetchTechnicianBookings(true)}
+            disabled={refreshing}
+            className="px-4 py-2.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-emerald-300 font-semibold text-xs transition-colors border border-slate-700 flex items-center gap-1.5 shadow-sm"
+            title="Refresh booking requests"
+          >
+            <RefreshCw className={`w-4 h-4 text-emerald-400 ${refreshing ? "animate-spin" : ""}`} /> Refresh Requests
+          </button>
           <button
             onClick={() => {
               const el = document.getElementById("my-services-section");
@@ -343,7 +374,7 @@ export default function TechnicianDashboard() {
             <p className="text-xs text-slate-400 mt-0.5">Accept customer requests, start work, and mark completed</p>
           </div>
           <button
-            onClick={fetchTechnicianBookings}
+            onClick={() => fetchTechnicianBookings(true)}
             className="text-xs font-semibold px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors"
           >
             Refresh List
