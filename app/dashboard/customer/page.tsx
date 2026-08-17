@@ -84,23 +84,20 @@ export default function CustomerDashboard() {
   };
 
   useEffect(() => {
-    fetchBookings();
-    fetchPayments();
+    const loadData = async () => {
+      await fetchPayments();
+      await fetchBookings();
+    };
+
+    loadData();
 
     const handleFocus = () => {
-      fetchBookings();
-      fetchPayments();
+      loadData();
     };
     window.addEventListener("focus", handleFocus);
 
-    const intervalId = setInterval(() => {
-      fetchBookings();
-      fetchPayments();
-    }, 15000);
-
     return () => {
       window.removeEventListener("focus", handleFocus);
-      clearInterval(intervalId);
     };
   }, []);
 

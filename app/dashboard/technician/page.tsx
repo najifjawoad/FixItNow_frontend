@@ -51,6 +51,9 @@ export default function TechnicianDashboard() {
       if (isManualRefresh) setRefreshing(true);
       else if (bookings.length === 0) setLoading(true);
 
+      // Trigger payments endpoint to ensure any completed payments are synced to PAID status in DB
+      await api.get("/payments/my-payments").catch(() => {});
+
       const res = await api.get("/users/get-my-bookings");
       const data = Array.isArray(res) ? res : res?.data || [];
       setBookings(data);
@@ -85,17 +88,12 @@ export default function TechnicianDashboard() {
     fetchTechnicianBookings();
     fetchMyServices();
 
-    // Auto-refetch when window gains focus or on periodic interval (every 15s)
+    // Refetch when window gains focus (e.g. returning to browser tab)
     const handleFocus = () => fetchTechnicianBookings();
     window.addEventListener("focus", handleFocus);
 
-    const intervalId = setInterval(() => {
-      fetchTechnicianBookings();
-    }, 15000);
-
     return () => {
       window.removeEventListener("focus", handleFocus);
-      clearInterval(intervalId);
     };
   }, []);
 
