@@ -274,7 +274,24 @@ export default function TechnicianDetailPage() {
       router.push("/dashboard/customer");
     } catch (err: any) {
       console.error("Failed to submit booking request:", err);
-      toast.error(err.message || "Failed to submit booking request. Please select a valid open slot.");
+      const rawMsg = err.message || "";
+      const isAlreadyBooked =
+        rawMsg.includes("Unique constraint") ||
+        rawMsg.includes("availabilityId") ||
+        rawMsg.includes("already booked");
+
+      const userFriendlyMsg = isAlreadyBooked
+        ? "This time slot has already been booked. Please choose a different available slot."
+        : rawMsg || "Failed to submit booking request. Please try again.";
+
+      toast.error(userFriendlyMsg);
+      // Refresh technician data to get updated slot statuses
+      if (technicianId) {
+        api.get(`/users/technicians/${technicianId}`).then((res) => {
+          const data = res?.data || res;
+          if (data && data.id) setTechnician(data);
+        }).catch(() => {});
+      }
     } finally {
       setBookingLoading(false);
     }
@@ -441,15 +458,25 @@ export default function TechnicianDetailPage() {
                   return (
                     <button
                       key={slot.id}
-                      onClick={() => handleOpenModal(slot.id)}
+                      disabled={slot.isBooked}
+                      onClick={() => !slot.isBooked && handleOpenModal(slot.id)}
                       className={`p-3 rounded-xl border text-left transition-all group ${
-                        selectedSlotId === slot.id
+                        slot.isBooked
+                          ? "bg-slate-900/40 border-slate-900 text-slate-600 opacity-60 cursor-not-allowed"
+                          : selectedSlotId === slot.id
                           ? "bg-indigo-600 border-indigo-400 text-white shadow-lg shadow-indigo-600/30"
                           : "bg-slate-900 border-slate-800 hover:border-indigo-500/50 hover:bg-slate-800 text-slate-200"
                       }`}
                     >
-                      <div className="text-[11px] font-semibold text-slate-400 group-hover:text-indigo-300">
-                        {dateFormatted}
+                      <div className="flex items-center justify-between">
+                        <div className="text-[11px] font-semibold text-slate-400 group-hover:text-indigo-300">
+                          {dateFormatted}
+                        </div>
+                        {slot.isBooked && (
+                          <span className="text-[9px] px-1.5 py-0.5 rounded-full bg-rose-950/60 text-rose-400 border border-rose-900 font-bold uppercase">
+                            Booked
+                          </span>
+                        )}
                       </div>
                       <div className="text-sm font-extrabold flex items-center gap-1 mt-0.5">
                         <Clock className="w-3.5 h-3.5 text-indigo-400" />
@@ -469,63 +496,51 @@ export default function TechnicianDetailPage() {
           </section>
         </div>
 
-        {/* Customer Reviews Sidebar */}
+        {/* Sidebar Info & Booking Actions */}
         <aside className="space-y-6">
-          <div className="glass-card p-6 rounded-2xl border border-slate-800 space-y-4">
-            <h3 className="font-bold text-white text-base flex items-center gap-2 border-b border-slate-800 pb-3">
-              <Star className="w-5 h-5 text-amber-400 fill-amber-400" /> Verified Customer Reviews
-            </h3>
+          <div className="glass-card p-6 sm:p-8 rounded-2xl border border-slate-800 space-y-6">
+            <div>
+              <h3 className="font-bold text-white text-sm uppercase tracking-wider mb-2">
+                Booking Information
+              </h3>
+              <p className="text-xs text-slate-400 leading-relaxed">
+                Select a service package and time slot above to submit a booking request. The technician will be notified immediately to accept your job.
+              </p>
+            </div>
 
-            {technician.reviews && technician.reviews.length > 0 ? (
-              <div className="space-y-4 max-h-[500px] overflow-y-auto pr-1">
-                {technician.reviews.map((rev) => (
-                  <div key={rev.id} className="p-3.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-2">
-                    <div className="flex items-center justify-between text-xs">
-                      <span className="font-semibold text-slate-200">{rev.customer?.name || "Verified Customer"}</span>
-                      <div className="flex items-center text-amber-400 font-bold">
-                        <Star className="w-3.5 h-3.5 fill-amber-400 mr-1" />
-                        {rev.rating}/5
-                      </div>
-                    </div>
-                    {rev.comment && <p className="text-xs text-slate-400 leading-relaxed italic">&quot;{rev.comment}&quot;</p>}
-                    <span className="text-[10px] text-slate-500 block">
-                      {new Date(rev.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-xs text-slate-400 text-center py-4">No reviews submitted yet for this technician.</p>
-            )}
+            <button
+              onClick={() => handleOpenModal()}
+              className="w-full py-3.5 rounded-xl bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold text-xs shadow-lg shadow-indigo-600/30 transition-all flex items-center justify-center gap-2"
+            >
+              <Calendar className="w-4 h-4" /> Book Appointment Now
+            </button>
           </div>
         </aside>
       </div>
 
-      {/* Booking Form Modal */}
+      {/* Booking Modal */}
       {isModalOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/80 backdrop-blur-md">
-          <div className="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-8 border border-slate-700 shadow-2xl relative space-y-6">
+          <div className="glass-card w-full max-w-lg rounded-3xl p-6 sm:p-8 border border-slate-800 space-y-6 shadow-2xl relative animate-in fade-in zoom-in-95 duration-200">
             <button
               onClick={() => setIsModalOpen(false)}
-              className="absolute right-5 top-5 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white"
+              className="absolute top-5 right-5 p-2 rounded-xl bg-slate-800 text-slate-400 hover:text-white transition-colors"
             >
-              <X className="w-5 h-5" />
+              <X className="w-4 h-4" />
             </button>
 
             <div>
-              <h2 className="text-xl font-extrabold text-white flex items-center gap-2">
-                <Calendar className="w-5 h-5 text-indigo-400" /> Book Service Appointment
-              </h2>
-              <p className="text-xs text-slate-400 mt-1">
-                Technician: <strong className="text-slate-200">{technician.user?.name}</strong>
-              </p>
+              <span className="text-xs font-semibold text-indigo-400 uppercase tracking-wider block mb-1">
+                Confirm Appointment
+              </span>
+              <h3 className="text-xl font-extrabold text-white">Book Service with {technician.user?.name}</h3>
             </div>
 
             <form onSubmit={handleCreateBooking} className="space-y-4">
               {/* Select Service */}
               <div>
                 <label className="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-1.5">
-                  Select Package *
+                  Select Service Package *
                 </label>
                 <select
                   value={selectedServiceId}
@@ -533,10 +548,9 @@ export default function TechnicianDetailPage() {
                   required
                   className="w-full bg-slate-900 text-white text-xs rounded-xl px-3 py-3 border border-slate-800 focus:border-indigo-500 focus:outline-none"
                 >
-                  <option value="">Choose a Service Package</option>
-                  {technician.services?.map((s) => (
-                    <option key={s.id} value={s.id}>
-                      {s.title} (${Number(s.price).toFixed(2)}) - {s.durationMinutes} mins
+                  {technician.services?.map((srv) => (
+                    <option key={srv.id} value={srv.id}>
+                      {srv.title} (${Number(srv.price).toFixed(2)})
                     </option>
                   ))}
                 </select>
@@ -555,8 +569,8 @@ export default function TechnicianDetailPage() {
                 >
                   <option value="">Choose Available Date & Time</option>
                   {technician.availability?.map((slot) => (
-                    <option key={slot.id} value={slot.id}>
-                      {new Date(slot.date).toLocaleDateString()} | {slot.startTime} - {slot.endTime}
+                    <option key={slot.id} value={slot.id} disabled={slot.isBooked}>
+                      {new Date(slot.date).toLocaleDateString()} | {slot.startTime} - {slot.endTime} {slot.isBooked ? "(Already Booked)" : ""}
                     </option>
                   ))}
                 </select>
