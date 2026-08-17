@@ -2,13 +2,14 @@
 
 import React, { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
-import { CheckCircle2, ArrowRight, Calendar, Home, Loader2, ShieldCheck } from "lucide-react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { CheckCircle2, ArrowRight, Calendar, Loader2, ShieldCheck } from "lucide-react";
 import toast from "react-hot-toast";
 import { api } from "@/lib/api/client";
 
 function PaymentSuccessContent() {
   const searchParams = useSearchParams();
+  const router = useRouter();
   const bookingId = searchParams.get("bookingId");
 
   const [isSyncing, setIsSyncing] = useState(true);
@@ -16,29 +17,36 @@ function PaymentSuccessContent() {
   useEffect(() => {
     let isMounted = true;
 
-    const syncPaymentStatus = async () => {
+    const syncPaymentStatusAndRedirect = async () => {
       try {
         // Trigger backend payment history fetch which auto-syncs ACCEPTED -> PAID bookings
         await api.get("/payments/my-payments");
         if (isMounted) {
           setIsSyncing(false);
-          toast.success("Payment verified and booking updated to PAID!");
+          toast.success("Payment verified! Booking updated to PAID.");
+          // Automatically redirect customer to dashboard
+          setTimeout(() => {
+            router.replace("/dashboard/customer");
+          }, 1200);
         }
       } catch (err) {
         console.error("Payment status sync warning:", err);
         if (isMounted) {
           setIsSyncing(false);
           toast.success("Payment completed successfully!");
+          setTimeout(() => {
+            router.replace("/dashboard/customer");
+          }, 1200);
         }
       }
     };
 
-    syncPaymentStatus();
+    syncPaymentStatusAndRedirect();
 
     return () => {
       isMounted = false;
     };
-  }, [bookingId]);
+  }, [bookingId, router]);
 
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
@@ -56,11 +64,11 @@ function PaymentSuccessContent() {
         <div className="space-y-2">
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider inline-flex items-center gap-1.5">
             <ShieldCheck className="w-3.5 h-3.5" />
-            {isSyncing ? "Verifying Transaction..." : "Stripe Transaction Confirmed"}
+            {isSyncing ? "Verifying Transaction..." : "Redirecting to Dashboard..."}
           </span>
           <h1 className="text-3xl font-extrabold text-white">Payment Successful!</h1>
           <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-            Your booking payment has been authorized. The status has been updated to <strong className="text-emerald-400 uppercase font-bold">PAID</strong> and your technician has been notified to proceed.
+            Your booking payment has been authorized and status updated to <strong className="text-emerald-400 uppercase font-bold">PAID</strong>. Taking you to your dashboard...
           </p>
         </div>
 
@@ -71,19 +79,12 @@ function PaymentSuccessContent() {
           </div>
         )}
 
-        <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
+        <div className="pt-2">
           <Link
             href="/dashboard/customer"
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-lg shadow-indigo-600/30 flex items-center justify-center gap-2"
+            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs transition-all shadow-lg shadow-indigo-600/30 inline-flex items-center justify-center gap-2"
           >
-            <Calendar className="w-4 h-4" /> View Booking Status <ArrowRight className="w-4 h-4" />
-          </Link>
-
-          <Link
-            href="/"
-            className="w-full sm:w-auto px-6 py-3 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold text-xs transition-colors border border-slate-700 flex items-center justify-center gap-2"
-          >
-            <Home className="w-4 h-4" /> Home Page
+            <Calendar className="w-4 h-4" /> Go to Dashboard Now <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>
