@@ -23,20 +23,15 @@ function PaymentSuccessContent() {
         await api.get("/payments/my-payments");
         if (isMounted) {
           setIsSyncing(false);
-          toast.success("Payment verified! Booking updated to PAID.");
-          // Automatically redirect customer to dashboard
-          setTimeout(() => {
-            router.replace("/dashboard/customer");
-          }, 1200);
+          toast.success("Payment successful! Your booking status is updated to PAID.");
+          router.replace("/dashboard/customer");
         }
       } catch (err) {
         console.error("Payment status sync warning:", err);
         if (isMounted) {
           setIsSyncing(false);
           toast.success("Payment completed successfully!");
-          setTimeout(() => {
-            router.replace("/dashboard/customer");
-          }, 1200);
+          router.replace("/dashboard/customer");
         }
       }
     };
