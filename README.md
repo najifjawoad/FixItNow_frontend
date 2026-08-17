@@ -4,6 +4,13 @@ FixItNow is a modern, responsive Next.js (App Router) frontend application for a
 
 ---
 
+## 🌐 Live Deployment Links
+
+- **Frontend Application (Vercel)**: [https://fix-it-now-frontend-iota.vercel.app/](https://fix-it-now-frontend-iota.vercel.app/)
+- **Backend API (Vercel)**: [https://fixitnowbackend-eta.vercel.app/](https://fixitnowbackend-eta.vercel.app/)
+
+---
+
 ## 🔑 Working Demo Credentials
 
 | Role | Email | Password | Phone | Name / Specialization |
@@ -106,8 +113,8 @@ flowchart TD
 ### 1. Environment Setup
 Create a `.env.local` file in the root directory:
 ```env
-NEXT_PUBLIC_API_BASE_URL=http://localhost:3000/api
-NEXT_PUBLIC_APP_URL=http://localhost:3001
+NEXT_PUBLIC_API_BASE_URL=https://fixitnowbackend-eta.vercel.app/api
+NEXT_PUBLIC_APP_URL=https://fix-it-now-frontend-iota.vercel.app
 ```
 
 ### 2. Install Dependencies
