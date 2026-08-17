@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { XCircle, RefreshCw, Calendar, Home } from "lucide-react";
+import { XCircle, RefreshCw, Home, Loader2 } from "lucide-react";
 
-export default function PaymentCancelPage() {
+function PaymentCancelContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get("bookingId");
 
@@ -26,6 +26,13 @@ export default function PaymentCancelPage() {
           </p>
         </div>
 
+        {bookingId && (
+          <div className="p-4 rounded-xl bg-slate-900/90 border border-slate-800 text-xs font-mono text-slate-400 text-left space-y-1">
+            <span className="block text-[10px] text-slate-500 uppercase tracking-wider">Booking ID</span>
+            <span className="text-rose-300 font-bold block truncate">{bookingId}</span>
+          </div>
+        )}
+
         <div className="pt-2 flex flex-col sm:flex-row items-center justify-center gap-3">
           <Link
             href="/dashboard/customer"
@@ -43,5 +50,20 @@ export default function PaymentCancelPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentCancelPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
+          <Loader2 className="w-8 h-8 text-rose-400 animate-spin mb-2" />
+          <p className="text-sm text-slate-400">Loading details...</p>
+        </div>
+      }
+    >
+      <PaymentCancelContent />
+    </Suspense>
   );
 }

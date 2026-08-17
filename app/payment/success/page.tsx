@@ -1,18 +1,44 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
-import { CheckCircle2, ArrowRight, Calendar, ShieldCheck, Home } from "lucide-react";
+import { CheckCircle2, ArrowRight, Calendar, Home, Loader2, ShieldCheck } from "lucide-react";
 import toast from "react-hot-toast";
+import { api } from "@/lib/api/client";
 
-export default function PaymentSuccessPage() {
+function PaymentSuccessContent() {
   const searchParams = useSearchParams();
   const bookingId = searchParams.get("bookingId");
 
+  const [isSyncing, setIsSyncing] = useState(true);
+
   useEffect(() => {
-    toast.success("Payment completed successfully!");
-  }, []);
+    let isMounted = true;
+
+    const syncPaymentStatus = async () => {
+      try {
+        // Trigger backend payment history fetch which auto-syncs ACCEPTED -> PAID bookings
+        await api.get("/payments/my-payments");
+        if (isMounted) {
+          setIsSyncing(false);
+          toast.success("Payment verified and booking updated to PAID!");
+        }
+      } catch (err) {
+        console.error("Payment status sync warning:", err);
+        if (isMounted) {
+          setIsSyncing(false);
+          toast.success("Payment completed successfully!");
+        }
+      }
+    };
+
+    syncPaymentStatus();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [bookingId]);
 
   return (
     <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
@@ -20,16 +46,21 @@ export default function PaymentSuccessPage() {
         <div className="absolute top-0 right-0 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl -z-10" />
 
         <div className="w-20 h-20 rounded-full bg-emerald-500/20 text-emerald-400 border-2 border-emerald-500/40 flex items-center justify-center mx-auto shadow-lg shadow-emerald-500/20 animate-bounce" style={{ animationDuration: "2s" }}>
-          <CheckCircle2 className="w-10 h-10" />
+          {isSyncing ? (
+            <Loader2 className="w-10 h-10 animate-spin text-emerald-400" />
+          ) : (
+            <CheckCircle2 className="w-10 h-10" />
+          )}
         </div>
 
         <div className="space-y-2">
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider">
-            Stripe Transaction Confirmed
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-emerald-500/15 text-emerald-300 border border-emerald-500/30 uppercase tracking-wider inline-flex items-center gap-1.5">
+            <ShieldCheck className="w-3.5 h-3.5" />
+            {isSyncing ? "Verifying Transaction..." : "Stripe Transaction Confirmed"}
           </span>
           <h1 className="text-3xl font-extrabold text-white">Payment Successful!</h1>
           <p className="text-xs sm:text-sm text-slate-300 max-w-md mx-auto leading-relaxed">
-            Your booking payment has been authorized. The status has been updated to <strong className="text-purple-300 uppercase">PAID</strong> and your technician has been notified to proceed.
+            Your booking payment has been authorized. The status has been updated to <strong className="text-emerald-400 uppercase font-bold">PAID</strong> and your technician has been notified to proceed.
           </p>
         </div>
 
@@ -57,5 +88,20 @@ export default function PaymentSuccessPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function PaymentSuccessPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="min-h-[70vh] flex flex-col items-center justify-center p-6 text-center">
+          <Loader2 className="w-8 h-8 text-emerald-400 animate-spin mb-2" />
+          <p className="text-sm text-slate-400">Loading payment status...</p>
+        </div>
+      }
+    >
+      <PaymentSuccessContent />
+    </Suspense>
   );
 }
