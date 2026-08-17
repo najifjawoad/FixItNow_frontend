@@ -19,23 +19,23 @@ function PaymentSuccessContent() {
     let isMounted = true;
 
     const syncAndRedirect = async () => {
+      const targetDashboard = user?.role === "TECHNICIAN" ? "/dashboard/technician" : "/dashboard/customer";
+      const redirectUrl = `${targetDashboard}?paymentSuccess=true${bookingId ? `&bookingId=${bookingId}` : ""}`;
+
       try {
         // Trigger backend payment status sync to turn ACCEPTED -> PAID
         await api.get("/payments/my-payments").catch(() => {});
-        if (isMounted) {
-          toast.success("Payment completed! Booking status updated to PAID.");
-        }
       } catch (err) {
         console.error("Payment status sync error:", err);
       } finally {
         if (isMounted) {
           setSyncing(false);
-          const targetDashboard = user?.role === "TECHNICIAN" ? "/dashboard/technician" : "/dashboard/customer";
-          const redirectUrl = `${targetDashboard}?paymentSuccess=true${bookingId ? `&bookingId=${bookingId}` : ""}`;
-          
-          setTimeout(() => {
+          // Immediate browser navigation to dashboard
+          if (typeof window !== "undefined") {
+            window.location.href = redirectUrl;
+          } else {
             router.replace(redirectUrl);
-          }, 1200);
+          }
         }
       }
     };
@@ -45,7 +45,7 @@ function PaymentSuccessContent() {
     return () => {
       isMounted = false;
     };
-  }, [bookingId, router, user]);
+  }, [bookingId, user]);
 
   const targetDashboard = user?.role === "TECHNICIAN" ? "/dashboard/technician" : "/dashboard/customer";
   const dashboardUrl = `${targetDashboard}?paymentSuccess=true${bookingId ? `&bookingId=${bookingId}` : ""}`;
