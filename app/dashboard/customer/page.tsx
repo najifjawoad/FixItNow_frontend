@@ -91,6 +91,10 @@ export default function CustomerDashboard() {
 
     loadData();
 
+    if (typeof window !== "undefined" && window.location.search.includes("paymentSuccess=true")) {
+      toast.success("Payment confirmed! Your booking status is updated to PAID.", { id: "payment-success-toast" });
+    }
+
     const handleFocus = () => {
       loadData();
     };
