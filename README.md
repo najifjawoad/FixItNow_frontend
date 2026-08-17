@@ -23,10 +23,11 @@ FixItNow is a modern, responsive Next.js (App Router) frontend application for a
 1. **DB Box Installation & Full House Rewiring** (`$35.00`) - Engr. Tanvir Ahmed
 2. **IPS & Generator Line Connection & Servicing** (`$25.00`) - Engr. Tanvir Ahmed
 3. **Emergency Short-Circuit Repair & Load Balancing** (`$18.00`) - Engr. Tanvir Ahmed
-4. **Water Submersible Pump Repair & Unblocking** (`$30.00`) - Md. Rafiqul Islam
+4. **Water Submersible Pump Repair & Pipeline Unblocking** (`$30.00`) - Md. Rafiqul Islam
 5. **Sanitary Fitting & Concealed Pipe Leak Sealing** (`$22.00`) - Md. Rafiqul Islam
 6. **Inverter AC Master Jet Wash & Filter Cleaning** (`$20.00`) - Kazi Mahmud Hasan
-7. **Modular Kitchen Cabinet Repair & Lock Fitting** (`$20.00`) - Naimur Rahman
+7. **AC Gas Refill (R32 / R410a) & Copper Pipe Repair** (`$45.00`) - Kazi Mahmud Hasan
+8. **Modular Kitchen Cabinet Repair & Lock Fitting** (`$20.00`) - Naimur Rahman
 
 ---
 
@@ -125,6 +126,6 @@ Open [http://localhost:3001](http://localhost:3001) in your browser.
 ## 📋 Additional Key Features
 
 1. **Role Enforcement**: Technicians cannot book services like customers (`"Logged in as a Technician. Only Customer accounts can book services"`).
-2. **Unified Public Services Catalog**: All users, visitors, and technicians browse the exact same 10 database services.
+2. **Unified Public Services Catalog**: All users, visitors, and technicians browse the exact same real-time database service offerings.
 3. **Responsive Toast Feedback**: Shortened popup duration (`2500ms`) with close cross buttons for clean user experience.
 4. **Middleware Security**: Automatically guards `/dashboard/customer`, `/dashboard/technician`, and `/dashboard/admin` based on JWT token claims.

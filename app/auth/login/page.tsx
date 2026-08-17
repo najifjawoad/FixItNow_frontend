@@ -160,7 +160,7 @@ export default function LoginPage() {
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={() => fillQuickDemo("tech@fixitnow.com")}
+                onClick={() => fillQuickDemo("tanvir.electric@gmail.com")}
                 className="flex flex-col items-center justify-center p-3 rounded-xl bg-slate-900 hover:bg-amber-500/10 border border-slate-800 hover:border-amber-500/30 text-amber-400 transition-all group"
               >
                 <Briefcase className="w-5 h-5 mb-1 group-hover:scale-110 transition-transform" />

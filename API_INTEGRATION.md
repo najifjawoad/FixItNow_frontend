@@ -20,7 +20,7 @@ This document maps all frontend Next.js App Router components and pages to their
 | Frontend Route / Component | Action / Event | Backend API Endpoint | HTTP Method | Auth Required | Description |
 | :--- | :--- | :--- | :--- | :--- | :--- |
 | `/` (Homepage) | Component Mount | `/api/users/services` | `GET` | Public | Loads featured service packages for homepage cards. |
-| `/` (Homepage) | Component Mount | `/api/users/technicians` | `GET` | Public | Fetches top-rated Bangladeshi technicians with skills & rating stats. |
+| `/` (Homepage) | Component Mount | `/api/users/technicians` | `GET` | Public | Fetches top-rated technicians with skills & rating stats. |
 | `/services` | Filter / Search | `/api/users/services` | `GET` | Public | Supports `categoryId`, `search`, `minPrice`, `maxPrice`, `minRating`, `sortBy`, `limit`. |
 | `/services` | Sidebar Mount | `/api/admin/allCategories` | `GET` | Public | Fetches all platform categories (including dynamic admin-created categories). |
 | `/technicians/[id]` | Profile Load | `/api/users/technicians/:id` | `GET` | Public | Fetches single technician bio, phone, rating, open availability slots, and review feed. |
@@ -34,6 +34,7 @@ This document maps all frontend Next.js App Router components and pages to their
 | `/technicians/[id]` (Modal) | Submit Booking | `/api/bookings` | `POST` | `CUSTOMER` | Creates booking request with `{ serviceId, availabilityId, address, notes }`. *(Restricted from Technicians)* |
 | `/dashboard/customer` | Page Load | `/api/users/get-my-bookings` | `GET` | `CUSTOMER`, `TECHNICIAN` | Fetches customer booking history with real-time status badges. |
 | `/dashboard/customer` | "Pay Now" Click | `/api/payments/create` | `POST` | `CUSTOMER` | Initiates Stripe session for `ACCEPTED` booking, returns `checkoutUrl`. |
+| `/dashboard/customer` | Cancel Button | `/api/bookings/:id/cancel` | `PATCH` | `CUSTOMER` | Cancels eligible booking (`REQUESTED` / `ACCEPTED`) and releases time slot back to open schedule. |
 | `/dashboard/customer` | Payments Table | `/api/payments/my-payments` | `GET` | `CUSTOMER`, `TECHNICIAN` | Fetches transaction history with transaction IDs & amounts. Auto-syncs paid status. |
 | `/dashboard/customer` | Leave Review Modal | `/api/users/review` | `POST` | `CUSTOMER` | Submits rating (1-5) and feedback comment for completed booking. Replaces button with `✓ Review Submitted`. |
 
@@ -50,6 +51,7 @@ This document maps all frontend Next.js App Router components and pages to their
 | `/dashboard/technician` | Delete Service Button | `/api/technician/services/:id` | `DELETE` | `TECHNICIAN` | Deletes service package listing from platform. |
 | `/dashboard/technician/availability` | Add Slot | `/api/technician/availability` | `POST` | `TECHNICIAN` | Creates open slot with `{ date, startTime, endTime }`. |
 | `/dashboard/technician/availability` | Edit Slot | `/api/technician/update-availability` | `PATCH` | `TECHNICIAN` | Updates slot schedule times. |
+| `/dashboard/technician/services` | Category Dropdown | `/api/technician/allCategories` | `GET` | `TECHNICIAN` | Fetches available service categories for selection. |
 | `/dashboard/technician/services` | Add Service | `/api/technician/services` | `POST` | `TECHNICIAN` | Publishes new service package and auto-redirects to `/dashboard/technician`. |
 
 ---

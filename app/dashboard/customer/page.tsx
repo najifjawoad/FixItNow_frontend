@@ -18,6 +18,7 @@ import {
   ExternalLink,
   Loader2,
   X,
+  XCircle,
   MessageSquare,
   Wrench,
 } from "lucide-react";
